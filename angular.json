@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "speech-recognition"
+    }
+  },
+  "defaultProject": "speech-recognition",
+  "cli": {
+    "analytics": "913acf51-f5b9-4e3d-b41f-58c01ebc57af"
+  }
 }

@@ -2,6 +2,23 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "paths": {
+      "@app/*": [
+        "./src/app/*"
+      ],
+      "@app/services/*": [
+        "./src/app/services/*"
+      ],
+      "@app/shared/*": [
+        "./src/app/shared/*"
+      ],
+      "@app/signalr/*": [
+        "./src/app/signalr/*"
+      ],
+      "@env/*": [
+        "./src/enviroments/*"
+      ]
+    },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,

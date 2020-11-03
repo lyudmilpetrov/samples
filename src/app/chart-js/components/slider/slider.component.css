@@ -1,0 +1,24 @@
+mat-slider {
+    width: 100%
+    /* color: black; */
+    /* background-color: black;
+     */
+}
+
+::ng-deep .mat-accent .mat-slider-thumb-label-text {
+    color: wheat;
+}
+
+ ::ng-deep .mat-accent .mat-slider-thumb {
+    background-color: black;
+}
+
+::ng-deep .mat-accent .mat-slider-thumb-label {
+    background-color: black;
+    /* min-width: 5vw;
+    max-width: 5vw; */
+}
+
+::ng-deep .mat-accent .mat-slider-track-fill {
+    background-color: black;
+}

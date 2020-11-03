@@ -1,0 +1,18 @@
+.grid-container {
+    margin: 20px;
+}
+
+canvas {
+    border: 1px dotted rosybrown;
+}
+
+.chart-container {
+    position: relative;
+    margin: auto;
+    /* height: 80vh;
+    width: 80vw; */
+    max-height: 80%;
+    min-height: 80%;
+    max-width: 80%;
+    min-width: 80%;
+}

@@ -131,3 +131,9 @@ git commit -m "generated deployables"
 git push -u origin master
 
 ng deploy --repo=https://github.com/lyudmilpetrov/samples.git
+
+
+https://www.gatsbyjs.com/docs/how-gatsby-works-with-github-pages/
+
+
+ng build --prod --output-path docs --base-href https://lyudmilpetrov.github.io/samples/

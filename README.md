@@ -93,7 +93,7 @@ ng add angular-cli-ghpages
 
 To start, build your project. For this option, Github Pages requires that the built project contents be solely on amaster or gh-pages branch or in adocs folder on the master branch. Here I’ll illustrate the later option. In the command below, the --outputPath=docs flag makes ng build output the resultant build to adocs folder. The --prod=true makes sure the resultant build is optimized for a production target. If you’re deploying to a user page, you do not need to specify --baseHref flag because it defaults to /. However, for project pages, --baseHref should be the name of the repository because the deployment URL will be <username>.github.io/samples/.
 ng build --prod=true --outputPath=docs --baseHref=/samples/
-
+ng build --prod --base-href "<repo-name>"
 
 If your project uses the Angular router, the routes you’ve configured on it will not be available from the server when requested directly on the browser address bar or when a page is refreshed. In those instances, you’ll get a 404 page which is not ideal. To remedy this, you’ll need to indicate to the server that if it gets a request for a page that it does not have, it should send the route to the index.html page. You do this by copying the index.html file and renaming the copy to 404.html. This ensures that all the routes the server does not have will be rerouted to the Angular router. You can read more about this here and here.
 
@@ -102,6 +102,8 @@ cp docs/index.html docs/404.html
 git remote add origin https://github.com/lyudmilpetrov/samples.git
 
 git remote rm origin
+
+ng build --prod --baseHref="https://lyudmilpetrov.github.io/samples/"
 
 
 Now, we need to build our code in production mode in order to create distributable files that will be deployed on GitHub Pages. By default, this deployable code is generated in the /dist/<prodect-name> folder under the app folder, but we need to generate this in the “docs” folder under the app folder.
@@ -127,3 +129,5 @@ git add .
 git commit -m "generated deployables"
 
 git push -u origin master
+
+ng deploy --repo=https://github.com/lyudmilpetrov/samples.git

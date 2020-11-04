@@ -100,3 +100,5 @@ If your project uses the Angular router, the routes you’ve configured on it wi
 cp docs/index.html docs/404.html
 
 git remote add origin https://github.com/lyudmilpetrov/samples.git
+
+git remote rm origin

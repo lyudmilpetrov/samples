@@ -102,3 +102,28 @@ cp docs/index.html docs/404.html
 git remote add origin https://github.com/lyudmilpetrov/samples.git
 
 git remote rm origin
+
+
+Now, we need to build our code in production mode in order to create distributable files that will be deployed on GitHub Pages. By default, this deployable code is generated in the /dist/<prodect-name> folder under the app folder, but we need to generate this in the “docs” folder under the app folder.
+
+So, we need to make a small change in the angular.json file and change the outputpath value to “docs/”.
+
+Another point to be noted is your URL is going to be hosted app on the Github Pages as https://username.github.io/respositoryname.
+
+In my case, it would be https://sanjaysaini2000.github.io/todo-app.
+
+This URL is needed to set the base URL of our website while generating the distributable files to deploy on GitHub Pages.
+
+So now, run the following command with your website URL in the baseHref  option in the git bash window to generate distributable files in the docs folder.
+
+ng build --prod --baseHref="https://lyudmilpetrov.github.io/samples/"
+Note that the username and repository name will be your GitHub username and repository name.
+
+Go to your app folder and check that the docs folder is created and contains all of the distributable files.
+
+
+git add .
+
+git commit -m "generated deployables"
+
+git push -u origin master

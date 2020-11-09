@@ -30,11 +30,19 @@ export class SliderComponent implements OnInit, OnDestroy {
             this.Slider_Data_Subscription.unsubscribe();
         }
     }
-    formatLabel(value) { return value; }
+    formatLabel(value) {
+        // // console.log(value);
+        if (value === 1) {
+            this.slider._value = 'dddd';
+            return this.slider._value;
+        } else {
+        return value;
+        }
+    }
     onInputChange(event: MatSliderChange) {
         const i = event.value;
-        // // // // console.log(i);
-        // // // // console.log(this.id);
+        // // // // i);
+        // // // // this.id);
         const rv: string[] = this.gcs.getDateForSlider(this.id.latestyear, this.id.latestmonth, -(i - 1), 'end');
         this.slider._value = rv[0];
         if (typeof this.Slider_Data.returneddate === 'undefined' || this.Slider_Data.returneddate !== rv[0]) {

@@ -15,7 +15,7 @@ export class MainNavComponent implements OnInit {
       map(result => result.matches),
       shareReplay()
     );
-  menuItems = ['Chart.js', 'SignalR'];
+  menuItems = ['Chart.js', 'SignalR-Chat-App', 'Face-Recognition'];
   LabelStr = this.menuItems[0];
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -24,10 +24,10 @@ export class MainNavComponent implements OnInit {
   selected(s: string) {
     this.LabelStr = s;
     const x = s.toLocaleLowerCase().replace(' ', '').replace('.', '-');
-    // console.log(x);
+    console.log(x);
     this.router.navigate([x]);
   }
   ngOnInit() {
-    // // console.log('called');
+    // // // // console.log('called');
   }
 }

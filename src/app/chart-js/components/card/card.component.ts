@@ -13,11 +13,11 @@ export class CardComponent implements OnInit, OnChanges {
   constructor() { }
   ngOnChanges() {
     this.titlestr = this.title.split(',');
-    console.log(this.titlestr);
+    // // console.log(this.titlestr);
   }
   ngOnInit(): void {
     this.titlestr = this.title.split(',');
-    console.log(this.titlestr);
+    // // console.log(this.titlestr);
   }
 
   captureScreen() {

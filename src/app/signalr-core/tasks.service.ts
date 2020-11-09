@@ -1,9 +1,9 @@
 import { EventEmitter, Injectable, Inject, OnDestroy } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { Observable, from, of, forkJoin, Subject, interval, Subscription } from 'rxjs';
-import { ConnectionState, ChannelSubject, ChannelEvent } from '@app/signalr/signalr.models';
+import { ConnectionState, ChannelSubject, ChannelEvent } from '@app/signalr-core/signalr.models';
 import { OfflineService, DataServices } from '@app/services/services';
-import { UserInfo } from '@app/shared/globals';
+import { Globals, UserInfo } from '@app/shared/globals';
 
 @Injectable({ providedIn: 'root' })
 export class TasksService implements OnDestroy {
@@ -68,7 +68,8 @@ export class TasksService implements OnDestroy {
     ConnectionEstablished = new EventEmitter<boolean>();
     constructor(
         private os: OfflineService,
-        private ds: DataServices
+        private ds: DataServices,
+        public globals: Globals
     ) {
         this.connectionState$ = this.connectionStateSubject.asObservable();
         this.error$ = this.errorSubject.asObservable();
@@ -79,56 +80,62 @@ export class TasksService implements OnDestroy {
         });
     }
     initilizeSignalR(serverapi: string, hub: string) {
-        this.hubConnection = new HubConnectionBuilder()
-            .withUrl(serverapi + hub)
-            .withAutomaticReconnect([30, 30, 30, 30])
-            .build();
-        // // console.log(this.hubConnection);
-        // define handlers for the connection state events
-        let priorEV = '';
-        this.hubConnection.onreconnecting((error) => {
-            // // console.log(error);
-            this.connectionState$ = of(ConnectionState.Reconnecting);
-            this.error$ = of(error);
-        });
-        this.hubConnection.onreconnected((connectionid) => {
-            this.connectionState$ = of(ConnectionState.Connected);
-            this.connectionID$ = of(connectionid);
-        });
-        this.hubConnection.onclose(() => {
-            this.connectionState$ = of(ConnectionState.Disconnected);
-            this.connectionID$ = of('');
-        });
-        this.hubConnection.on('onEvent', (channel: string, ev: ChannelEvent) => {
-            // // // // // // // // console.log(`onEvent - ${channel} channel`, ev);
-            // This method acts like a broker for incoming messages. We
-            //  check the interal array of subjects to see if one exists
-            //  for the channel this came in on, and then emit the event
-            //  on it. Otherwise we ignore the message.
-            //
-            // // // // // // // // console.log(this.subjects);
-            const channelSub = this.subjects.find((x: ChannelSubject) => {
-                return x.channel === channel;
-            }) as ChannelSubject;
-            // // // // // // // // console.log(channelSub);
-            // If we found a subject then emit the event on it
-            //
-            if (channelSub !== undefined) {
-                if (JSON.stringify(ev.Data) !== priorEV) {
-                    channelSub.subject.next(ev);
-                    priorEV = JSON.stringify(ev.Data);
+        this.globals.incrementQuestionNumber();
+        if (this.globals.counterNumberForSignalR <= 2) {
+            this.hubConnection = new HubConnectionBuilder()
+                .withUrl(serverapi + hub)
+                .withAutomaticReconnect([30, 30, 30, 30])
+                .build();
+            // // this.hubConnection);
+            // define handlers for the connection state events
+            // console.log(this.hubConnection);
+            let priorEV = '';
+            this.hubConnection.onreconnecting((error) => {
+                // // error);
+                this.connectionState$ = of(ConnectionState.Reconnecting);
+                this.error$ = of(error);
+            });
+            this.hubConnection.onreconnected((connectionid) => {
+                this.connectionState$ = of(ConnectionState.Connected);
+                this.connectionID$ = of(connectionid);
+            });
+            this.hubConnection.onclose(() => {
+                this.connectionState$ = of(ConnectionState.Disconnected);
+                this.connectionID$ = of('');
+            });
+            this.hubConnection.on('onEvent', (channel: string, ev: ChannelEvent) => {
+                // // // // // // // // `onEvent - ${channel} channel`, ev);
+                // This method acts like a broker for incoming messages. We
+                //  check the interal array of subjects to see if one exists
+                //  for the channel this came in on, and then emit the event
+                //  on it. Otherwise we ignore the message.
+                //
+                // // // // // // // // this.subjects);
+                const channelSub = this.subjects.find((x: ChannelSubject) => {
+                    return x.channel === channel;
+                }) as ChannelSubject;
+                // // // // // // // // channelSub);
+                // If we found a subject then emit the event on it
+                //
+                if (channelSub !== undefined) {
+                    if (JSON.stringify(ev.Data) !== priorEV) {
+                        channelSub.subject.next(ev);
+                        priorEV = JSON.stringify(ev.Data);
+                    }
                 }
-            }
-        });
-        this.hubConnection.on('ReceiveConnectionID', (id: string) => {
-            this.os.setCache('sessionStorage', 'cid', id, 'string');
-        });
-        this.hubConnection.on('Send', (id: string) => {
+            });
+            this.hubConnection.on('ReceiveConnectionID', (id: string) => {
+                this.os.setCache('sessionStorage', 'cid', id, 'string');
+            });
+            this.hubConnection.on('Send', (id: string) => {
 
-        });
-        this.hubConnection.on('Subscribed', (ev: ChannelEvent) => {
-            // // console.log(`Subscribed`, ev);
-        });
+            });
+            this.hubConnection.on('Subscribed', (ev: ChannelEvent) => {
+                // // `Subscribed`, ev);
+            });
+            // this.start('machine', 'encrkye');
+            this.startConnection();
+        }
     }
     start(machine: string, encrkey: string) {
         this.hubConnection.start()
@@ -137,22 +144,23 @@ export class TasksService implements OnDestroy {
                 this.hubConnection.invoke('RegisterUser', machine, encrkey);
                 this.connectionState$ = of(ConnectionState.Connected);
             }).catch((error) => {
+                // console.log(error);
                 this.error$ = of(error);
             });
     }
     sub(channel: string): Observable<ChannelEvent> {
         // Try to find an observable that we already created for the requested channel
-        // // console.log('Subscribing entry for channel - ' + channel);
-        // // console.log(this.subjects);
-        // // console.log(this.getConnetionState());
+        // // 'Subscribing entry for channel - ' + channel);
+        // // this.subjects);
+        // // this.getConnetionState());
         let channelSub = this.subjects.find((x: ChannelSubject) => {
             return x.channel === channel;
         }) as ChannelSubject;
-        // // // // // // // console.log(channelSub);
+        // // // // // // // channelSub);
         // If we already have one for this event, then just return it
         if (typeof channelSub !== 'undefined') {
-            // // // // // // // console.log(`Found existing observable for ${channel} channel`);
-            // // // // // // // console.log(this.hubProxy);
+            // // // // // // // `Found existing observable for ${channel} channel`);
+            // // // // // // // this.hubProxy);
             return channelSub.subject.asObservable();
         }
         channelSub = new ChannelSubject();

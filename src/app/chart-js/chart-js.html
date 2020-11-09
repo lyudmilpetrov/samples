@@ -1,6 +1,8 @@
 <div class="grid-container">
-    <h1>Visualization Sample</h1>
-    <app-dashboards-slider [id]="forSlider_1"></app-dashboards-slider>
+    <h1 style="margin-left: 5%;">Visualization sample, please use the slider to check prior time periods, covering last 12 months as of the end of the month</h1>
+    <div style="margin-left: 5%; margin-right: 5%;">
+        <app-dashboards-slider [id]="forSlider_1"></app-dashboards-slider>
+    </div>
     <mat-grid-list cols="2" rowHeight="250px">
         <!--Table-->
         <mat-grid-tile [colspan]="1" [rowspan]="3">

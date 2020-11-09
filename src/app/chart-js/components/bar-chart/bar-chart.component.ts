@@ -34,7 +34,7 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnChanges, OnDe
         const VisualBarSub = 'Observable' + this.PassedInfo.observable;
         this.Bar_Chart_Data_Subscription = this.OAS[VisualBarSub].subscribe((x: BarChart) => {
             if (Object.keys(x).length !== 0) {
-                // // // // console.log(this.barchartCanvas);
+                // // // // // // console.log(this.barchartCanvas);
                 this.Bar_Chart_Data = x;
                 const options = {
                     type: this.PassedInfo.type.toLowerCase(),
@@ -113,6 +113,6 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnChanges, OnDe
         });
     }
     ngOnChanges(changes: SimpleChanges) {
-        console.log(this.PassedInfo);
+        // // console.log(this.PassedInfo);
      }
 }

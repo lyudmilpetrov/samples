@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterEvent } from '@angular/router';
-import { TasksService } from '@app/signalr/tasks.service';
+import { TasksService } from '@app/signalr-core/tasks.service';
 import { Subscription } from 'rxjs';
-import { ChannelEvent } from './signalr/signalr.models';
+import { ChannelEvent } from './signalr-core/signalr.models';
 import * as faceapi from 'face-api.js';
 export let broweserRefresh = false;
 @Component({
@@ -21,16 +21,18 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
   navigationInterceptor(event: RouterEvent): void {
-    const signalrpoint = 'https://localhost:60127/';
+    const signalrpoint = 'https://localhost:54275/';
     this.counter += 1;
     if (this.counter >= 1) {
-      this.ts.initilizeSignalR(signalrpoint, 'tasks');
+      // this.ts.initilizeSignalR(signalrpoint, 'tasks');
     }
   }
   ngOnInit() {
+    const signalrpoint = 'https://localhost:54275/';
+    // this.ts.initilizeSignalR(signalrpoint, 'tasks');
     const MODEL_URL = '../assets/weights';
-    // console.log('!!!!!!!!!!!!!!');
-    // console.log(faceapi);
+    // '!!!!!!!!!!!!!!');
+    // faceapi);
     async function loadF(url: string, call: string) {
       await faceapi[call](url);
       // await faceapi.loadFaceLandmarkModel(url);
@@ -39,12 +41,14 @@ export class AppComponent implements OnInit, OnDestroy {
       // will still be executed synchronously thanks
       // to the await keyword
       // setTimeout(() => {
-      //   // console.log('Function: %d executed', input);
+      //   // 'Function: %d executed', input);
       // }, 1000 * input);
     }
     // Promise.all([myAsyncFunction(3), myAsyncFunction(2), myAsyncFunction(1)]);
     // https://school.geekwall.in/p/Hy29kFEGm/face-recognition-in-the-browser-with-tensorflow-js-javascript
-    Promise.all([loadF(MODEL_URL, 'loadFaceDetectionModel'), loadF(MODEL_URL, 'loadFaceLandmarkModel'), loadF(MODEL_URL, 'loadFaceRecognitionModel')]);
+    Promise.all([loadF(MODEL_URL, 'loadFaceDetectionModel'), loadF(MODEL_URL, 'loadFaceLandmarkModel'), loadF(MODEL_URL, 'loadFaceRecognitionModel')]).then((values) => {
+      console.log(values);
+  }).catch(err => console.log(err)).finally(() => { console.log('done loading'); });
 
   }
   ngOnDestroy() {

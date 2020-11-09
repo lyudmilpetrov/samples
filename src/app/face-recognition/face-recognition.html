@@ -1,0 +1,62 @@
+<!-- <mat-progress-spinner mode="indeterminate" *ngIf="IsWait"></mat-progress-spinner> -->
+<div class="overlay" *ngIf="IsWait">
+    <div class="center">
+        <mat-progress-spinner diameter=50 mode="indeterminate" color="accent">
+        </mat-progress-spinner>
+    </div>
+</div>
+<mat-grid-list cols="2" rowHeight="3:1" [gutterSize]="'10px'">
+    <mat-grid-tile [colspan]="1" [rowspan]="3">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>{{matched}}</mat-card-title>
+                <mat-card-subtitle>Video below</mat-card-subtitle>
+            </mat-card-header>
+            <div class="p-1">
+                <video #video class="vid" autoplay muted></video>
+            </div>
+            <mat-card-content>
+                <p>
+                    Allow the browser to use your camera and click on video to capture image or press button below, also enter your name below
+                </p>
+            </mat-card-content>
+            <mat-card-actions>
+                <mat-chip-list>
+                    <mat-chip color="accent" selected="true" (click)="captureImageFirst()" class="pointer">Capture First Image</mat-chip>
+                    <mat-chip color="accent" selected="true" (click)="captureImageSecond()" class="pointer">Capture Second Image</mat-chip>
+                    <mat-chip color="accent" selected="true" (click)="compareImages()" class="pointer">Compare</mat-chip>
+                </mat-chip-list>
+            </mat-card-actions>
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="2">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-subtitle>First Image</mat-card-subtitle>
+            </mat-card-header>
+            <div class="p-1">
+                <canvas #canvasLast class="vid"></canvas>
+            </div>
+            <mat-card-content>
+                <p>
+                    First captured image
+                </p>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="2">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-subtitle>Second Image</mat-card-subtitle>
+            </mat-card-header>
+            <div class="p-1">
+                <canvas #canvasPrior class="vid"></canvas>
+            </div>
+            <mat-card-content>
+                <p>
+                    Second captured image
+                </p>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+</mat-grid-list>

@@ -1,9 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TasksService } from '@app/signalr/tasks.service';
+import { TasksService } from '@app/signalr-core/tasks.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './shared/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +15,9 @@ import { LineChartComponent } from './chart-js/components/line-chart/line-chart.
 import { BarChartComponent } from './chart-js/components/bar-chart/bar-chart.component';
 import { SliderComponent } from './chart-js/components/slider/slider.component';
 import { RadarChartComponent } from './chart-js/components/radar-chart/radar-chart.component';
+import { Globals } from './shared/globals';
+import { OfflineService } from './services/services';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
 
@@ -28,6 +30,7 @@ import { RadarChartComponent } from './chart-js/components/radar-chart/radar-cha
     FormsModule,
     CommonModule,
     HttpClientModule,
+    OverlayModule,
     HttpClientXsrfModule.withOptions({
         cookieName: 'Building-App-Xsrf-Cookie',
         headerName: 'Building-App-Xsrf-Header'
@@ -43,7 +46,7 @@ import { RadarChartComponent } from './chart-js/components/radar-chart/radar-cha
     RadarChartComponent,
     SliderComponent
   ],
-  providers: [TasksService],
+  providers: [Globals, TasksService, OfflineService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })

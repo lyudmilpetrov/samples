@@ -59,7 +59,7 @@ export class ChartJSComponent implements OnInit, OnDestroy {
 
     this.initilizeAll();
     this.Slider_Data_1_Subscription = this.OAS.ObservableSlider_Bar_1.subscribe(x => {
-      // console.log(x);
+      // x);
       if (Object.keys(x).length !== 0) {
         this.showdata = false;
         this.Slider_Data_1 = x;
@@ -68,7 +68,7 @@ export class ChartJSComponent implements OnInit, OnDestroy {
     });
   }
   ngOnInit() {
-    // console.log('called');
+    // 'called');
   }
   ngOnDestroy() {
     if (this.Line_Sample1_Subscription) {
@@ -123,19 +123,21 @@ export class ChartJSComponent implements OnInit, OnDestroy {
     this.Report1.Transport = '';
     this.Report1.PBK = this.os.getCache('localStorage', 'n', 'string');
     const fileURL1 = this._jsonBaseURL + 'cases.json';
-    // // console.log(this.Report1);
+    // // this.Report1);
     this.d1CI.title = this.Report1.ReportName + ' as of ' + this.Report1.DateOfReference;
     this.d2CI.title = this.d1CI.title;
     this.d3CI.title = this.d2CI.title;
     this.titleForCard0 = 'Cases in Line format as of ' + this.Report1.DateOfReference + ',0';
     this.titleForCard1 = 'Cases in Bar format as of ' + this.Report1.DateOfReference + ',1';
     this.titleForCard2 = 'Cases in Radar format as of ' + this.Report1.DateOfReference + ',2';
-    this.OAS.readJSONToText(fileURL1, this.d1CI.title, 'Line', 1, 'CASES',
-      'TIMESTR', 'COUNT', 'GraphLineVisible1_t1', x.value,
-      x.latestyear, x.latestmonth, x.returnedyear, x.returnedmonth).subscribe(
-        res => {
-          this.showdata = true;
-        }
-      );
+    setTimeout(() => {
+      this.OAS.readJSONToText(fileURL1, this.d1CI.title, 'Line', 1, 'CASES',
+        'TIMESTR', 'COUNT', 'GraphLineVisible1_t1', x.value,
+        x.latestyear, x.latestmonth, x.returnedyear, x.returnedmonth).subscribe(
+          res => {
+            this.showdata = true;
+          }
+        );
+    }, 500);
   }
 }

@@ -98,10 +98,10 @@ export class ObservableAsService {
     changeVisibleObservable(...args: [d: LineChart | BarChart | SliderInfo, k: string]) {
         this[args[1]] = args[0];
         this[args[1] + '_Init'].next(this[args[1]]);
-        // // // console.log(this.GraphBarVisible1_t1);
+        // // // // // console.log(this.GraphBarVisible1_t1);
         this.GraphBarVisible1_t1_Init.next(this.GraphBarVisible1_t1);
-        // // // // console.log(this[args[1]]);
-        // // // // console.log(this[args[1] + '_Init']);
+        // // // // // // console.log(this[args[1]]);
+        // // // // // // console.log(this[args[1] + '_Init']);
     }
     readJSONToText(
         fileURL: string, charttitle: string, charttype: string,
@@ -110,8 +110,8 @@ export class ObservableAsService {
         observablename: string, limit: number,
         latestyear: number, latestmonth: number,
         returnedyear: number, returnedmonth: number): Observable<string> {
-        // // // // console.log(observablename);
-        // // // // // console.log(fileURL);
+        // // // // // // console.log(observablename);
+        // // // // // // // console.log(fileURL);
         return new Observable(observer => {
             this.gs.fileExists(fileURL).subscribe(x => {
                 if (x) {
@@ -148,7 +148,7 @@ export class ObservableAsService {
     }
     getJSONFromServer(report: IJSONReports) {
         const url = '';
-        // // // console.log(url);
+        // // // // // console.log(url);
         return this.httpClient.post(url, report).pipe(map((r: string) => {
             return r;
         }
@@ -157,7 +157,7 @@ export class ObservableAsService {
     getUserInfo(api: string, user: UserInfo): Observable<UserInfo> {
         const url = api + '?u=u';
         return this.httpClient.post(url, user).pipe(map((r: string) => {
-            // // // // // // // // // // // // // // // // // // // // // // console.log(r);
+            // // // // // // // // // // // // // // // // // // // // // // // // console.log(r);
             if (r === '') {
                 return r;
             } else {
@@ -174,15 +174,15 @@ export class ObservableAsService {
         const dataLine: LineChart = {};
         dataLine.datasets = [];
         const datasetsInfo = [...new Set(data.map(x => x[keyfordatasets]))].filter(x => x !== undefined);
-        // console.log(datasetsInfo);
-        // console.log(['keyfordatasets', keyfordatasets]);
+        // // // console.log(datasetsInfo);
+        // // // console.log(['keyfordatasets', keyfordatasets]);
         const lables = [...new Set(data.map(x => {
             if (x[keyfordatasets] === datasetsInfo[0]) {
                 return x[keyforlables];
             }
         }
         ))].filter(x => x !== undefined);
-        // console.log(lables);
+        // // // console.log(lables);
         dataLine.labels = lables;
         const baseColorStep = 360 / datasetsInfo.length;
         let cI = 0;
@@ -206,7 +206,12 @@ export class ObservableAsService {
             const a_range = [1, 1];
             const baseColor = this.gs.getHSLARandomColor(h_range, s_range, l_range, a_range);
             cI += 1;
-            datasetsForDataLine.borderColor = baseColor.HSLAValue;
+            // datasetsForDataLine.borderColor = baseColor.HSLAValue;
+            if (cI === 1) {
+                datasetsForDataLine.borderColor = 'hsl(236, 82%, 61%, 1)';
+            } else {
+                datasetsForDataLine.borderColor = 'hsl(102, 82%, 61%, 1)';
+            }
             dataLine.datasets.push(datasetsForDataLine);
         });
         dataLine.index = chartid;

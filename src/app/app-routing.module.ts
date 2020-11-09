@@ -4,10 +4,11 @@ import { ChartJSComponent } from './chart-js/chart-js.component';
 
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'samples/chart-js', pathMatch: 'full' },
-  { path: 'samples/chart-js', component: ChartJSComponent },
-  // { path: 'samples/chart-js', loadChildren: () => import('./chart-js/chart-js.module').then(m => m.ChartJSModule) },
-  { path: '**', redirectTo: 'samples/chart-js', pathMatch: 'full' },
+  { path: '', redirectTo: 'chart-js', pathMatch: 'full' },
+  { path: 'chart-js', component: ChartJSComponent },
+  { path: 'signalr-chat-app', loadChildren: () => import('./signalr-chat/signalr-chat.module').then(m => m.SignalRChatModule) },
+  { path: 'face-recognition', loadChildren: () => import('./face-recognition/face-recognition.module').then(m => m.FaceRecognitionModule) },
+  { path: '**', redirectTo: 'chart-js', pathMatch: 'full' },
 
 ];
 

@@ -27,7 +27,7 @@ export class OfflineService {
             window.addEventListener('online', (event) => this.onChange(event.type));
             window.addEventListener('offline', (event) => this.onChange(event.type));
         } catch (e) {
-            // // // // // // // // // // // // // // // // // // // // // // console.log(e);
+            // // // // // // // // // // // // // // // // // // // // // // e);
         }
     }
     onChange(internetconnection: string) {
@@ -693,8 +693,8 @@ export class DataServices {
                 this[modulestr + option + 'Init']['next'](projects);
             }
         } catch (err) {
-            // // // // // // // // // // // // // // // console.log([projects, option, modulestr]);
-            // // // // // // // // // // // // // // // console.log(err);
+            // // // // // // // // // // // // // // // [projects, option, modulestr]);
+            // // // // // // // // // // // // // // // err);
         }
     }
     fillProjectsAddtlInfoDetail(projects: DetailInfo[], option: string, modulestr: string) {
@@ -704,8 +704,8 @@ export class DataServices {
                 this[modulestr + option + 'Init']['next'](projects);
             }
         } catch (err) {
-            // // // // // // // // // // // // // // // console.log([projects, option, modulestr]);
-            // // // // // // // // // // // // // // // console.log(err);
+            // // // // // // // // // // // // // // // [projects, option, modulestr]);
+            // // // // // // // // // // // // // // // err);
         }
     }
     fillProjectsAddresses(addresses: ProjectAddress[]) {
@@ -718,8 +718,8 @@ export class DataServices {
     }
     fillDetailInfoNameOption(details: string[]) {
         this.projectDetailInfoNameOption = details;
-        // // // // // // // // // // // // // // // // // // // // // console.log('relaying');
-        // // // // // // // // // // // // // // // // // // // // // console.log(details);
+        // // // // // // // // // // // // // // // // // // // // // 'relaying');
+        // // // // // // // // // // // // // // // // // // // // // details);
 
         this.projectDetailInfoNameOptionInit.next(this.projectDetailInfoNameOption);
     }
@@ -730,16 +730,16 @@ export class DataServices {
         if (typeof this[keyname + 'Init'] !== 'undefined') {
             this[keyname + 'Init'].next(this[keyname]);
         } else {
-            // // // // // // // // // // // // console.log('???????????????????');
-            // // // // // // // // // // // // console.log(keyname);
-            // // // // // // // // // // // // console.log(this[keyname]);
-            // // // // // // // // // // // // console.log(this[keyname + 'Init']);
+            // // // // // // // // // // // // '???????????????????');
+            // // // // // // // // // // // // keyname);
+            // // // // // // // // // // // // this[keyname]);
+            // // // // // // // // // // // // this[keyname + 'Init']);
         }
         if (testing_var === keyname) {
-            // // // // // // // // // // console.log('???????????????????');
-            // // // // // // // // // // console.log(keyname);
-            // // // // // // // // // // console.log(this[keyname]);
-            // // // // // // // // // // console.log(this[keyname + 'Init']);
+            // // // // // // // // // // '???????????????????');
+            // // // // // // // // // // keyname);
+            // // // // // // // // // // this[keyname]);
+            // // // // // // // // // // this[keyname + 'Init']);
         }
     }
     getObservableObjects(keyname: string): string {
@@ -971,34 +971,34 @@ export class DataServices {
     checkIfAddressIsReal(streetnumber: string, streetdirection: string,
         streetname: string, streettype: string, streetapt: string,
         addresses: ProjectAddress[]): boolean {
-        // // // // // // console.log('-------------- Checking Address if real below!');
-        // // // // // // console.log(addresses);
+        // // // // // // '-------------- Checking Address if real below!');
+        // // // // // // addresses);
         let x1 = addresses;
         if (streetname.length > 0) {
             x1 = addresses.filter(a => a.projectName.toLocaleLowerCase().trim() === streetname.toLocaleLowerCase().trim());
         }
-        // // // // // // console.log(x1);
+        // // // // // // x1);
         let x2 = x1;
         if (streetnumber.length > 0) {
             x2 = x1.filter(a => a.projectNumber.toLocaleLowerCase().trim() === streetnumber.toLocaleLowerCase().trim());
         }
-        // // // // // // console.log(x2);
+        // // // // // // x2);
         let x3 = x2;
         if (streetdirection.length > 0) {
             x3 = x2.filter(a => a.projectDirection.toLocaleLowerCase().trim() === streetdirection.toLocaleLowerCase().trim());
         }
-        // // // // // // console.log(x3);
+        // // // // // // x3);
         let x4 = x3;
         if (streetapt.length > 0) {
             x4 = x3.filter(a => a.projectApt.toLocaleLowerCase().trim() === streetapt.toLocaleLowerCase().trim());
         }
-        // // // // // // console.log(x4);
+        // // // // // // x4);
         let x5 = x4;
         if (streettype.length > 0) {
             x5 = x4.filter(a => a.projectType.toLocaleLowerCase().trim() === streettype.toLocaleLowerCase().trim());
         }
-        // // // // // // console.log(x5);
-        // // // // // // console.log('-------------- Checking Address if real below ENDED!');
+        // // // // // // x5);
+        // // // // // // '-------------- Checking Address if real below ENDED!');
         if (typeof x5 !== 'undefined' && x5.length > 0) {
             return true;
         } else {
@@ -1055,8 +1055,8 @@ export class DataServices {
             to_import = false;
         }
         if (to_import) {
-            // // // // // // // // // // // // // // // // // // // // console.log('Adding psd');
-            // // // // // // // // // // // // // // // // // // // // console.log(psd);
+            // // // // // // // // // // // // // // // // // // // // 'Adding psd');
+            // // // // // // // // // // // // // // // // // // // // psd);
             this.addProjectsInfo(pd);
             this.addProjectsSearch(psd);
             this.countCounterProjects(this.projectsInfo.length);
@@ -1141,7 +1141,7 @@ export class DataServices {
     }
     getMachineName(fn: string): string {
         let r = '';
-        // // // // // // // // // // // // // // // // // // // console.log(this.projectsSTF);
+        // // // // // // // // // // // // // // // // // // // this.projectsSTF);
         try {
             r = this.projectsSTF.filter(x => x.fullname.trim().toLocaleLowerCase().replace(' ', '')
                 === fn.trim().toLocaleLowerCase().replace(' ', ''))[0].name;
@@ -1163,8 +1163,8 @@ export class DataServices {
     }
     convertListFullNamesToMachineNames(inputarr: Array<IOption>): Array<IOption> {
         const xarr = inputarr.map(x => {
-            // // // // // // // // // // // // // // // // console.log(x.label);
-            // // // // // // // // // // // // // // // // console.log(this.getMachineName(x.label));
+            // // // // // // // // // // // // // // // // // // console.log(x.label);
+            // // // // // // // // // // // // // // // // // // console.log(this.getMachineName(x.label));
             if (this.getMachineName(x.label).length > 0) {
                 x.label = this.getMachineName(x.label);
             }
@@ -1393,7 +1393,7 @@ export class GenericServices {
     //     }
     // }
     onBeforeUnload(win: string) {
-        // // // // console.log(location);
+        // // // // // // console.log(location);
         window.onbeforeunload = () => {
             const xcount: any = this.os.getCache('sessionStorage', win, 'object');
             xcount['entry'] = +xcount['entry'] + 1;
@@ -1516,8 +1516,8 @@ export class GenericServices {
         // if (dp === 2 && +(+num.toFixed(3)).toString().slice(-1) === 5) {
         //     return +(+num + 0.01).toFixed(dp);
         // } else {
-        // // // // // // console.log(num);
-        // // // // // // console.log(dp);
+        // // // // // // // // console.log(num);
+        // // // // // // // // console.log(dp);
         return +num.toFixed(dp);
         // }
         // if (arguments.length !== 2) { throw new Error('2 arguments required'); }
@@ -1577,8 +1577,8 @@ export class GenericServices {
         }
     }
     getFeeCalc_Generic(rate: number, value: number): number {
-        // // // // // // // // // // // console.log(rate);
-        // // // // // // // // // // // console.log(value);
+        // // // // // // // // // // // // // console.log(rate);
+        // // // // // // // // // // // // // console.log(value);
         return this.roundIt(rate * value, 2);
     }
     getFeeCalc_FirePermit(feebase: number, value: number, usetype: string): number[] {
@@ -1620,9 +1620,9 @@ export class GenericServices {
             calculatedFee = +calculatedFee + +techfee;
             calculatedFee = +calculatedFee + +cFee;
             calculatedFee = +calculatedFee + +SMIF;
-            // // // // // // // // // // // // console.log(feebase);
-            // // // // // // // // // // // // console.log(value);
-            // // // // // // // // // // // // console.log(usetype);
+            // // // // // // // // // // // // // // console.log(feebase);
+            // // // // // // // // // // // // // // console.log(value);
+            // // // // // // // // // // // // // // console.log(usetype);
             return [this.roundIt(+calculatedFee, 2), SMIF, cFee, techfee];
         } else {
             return [0, 0, 0, 0];
@@ -1633,10 +1633,10 @@ export class GenericServices {
         let SMIF = 0;
         let cFee = 0;
         const feesSplitFactors: FeesSplitFactors[] = JSON.parse(this.os.getCache('localStorage', 'FeesSplitFactors', 'object'));
-        // // // // // // console.log('use type - ' + usetype);
-        // // // // // // console.log('fee base - ' + feebase);
-        // // // // // // console.log('calculatedFee - ' + calculatedFee);
-        // // // // // // console.log(feesSplitFactors);
+        // // // // // // // // console.log('use type - ' + usetype);
+        // // // // // // // // console.log('fee base - ' + feebase);
+        // // // // // // // // console.log('calculatedFee - ' + calculatedFee);
+        // // // // // // // // console.log(feesSplitFactors);
         if (feesSplitFactors.length >= 1) {
             const feesSplitFactor = feesSplitFactors.filter(x => x.Use_Type === usetype);
             ///////////////// SMIF protion
@@ -1647,7 +1647,7 @@ export class GenericServices {
                     SMIF = value * +feesSplitFactor[0].SMIF_Multiplicator;
                 }
             }
-            // // // // // console.log('calculatedFee - ' + calculatedFee);
+            // // // // // // // console.log('calculatedFee - ' + calculatedFee);
             // if (usetype === 'R') {
             //     if ((value * 0.00013) < 0.5) {
             //         SMIF = 0.5;
@@ -1666,20 +1666,20 @@ export class GenericServices {
             //////////////// 1473 Fee
             const value_denominator = +feesSplitFactors[0].Fee_1473_Denominator;
             cFee = Math.ceil((value / value_denominator));
-            // // // // // // console.log(cFee);
-            // // // // // // console.log('1473 - ' + cFee);
+            // // // // // // // // console.log(cFee);
+            // // // // // // // // console.log('1473 - ' + cFee);
             /////////////// Tech fee of 4%
             const fee_tech_percent = +feesSplitFactors[0].Fee_Tech_Percent;
-            // // // // // // console.log('calculatedFee - ' + calculatedFee);
+            // // // // // // // // console.log('calculatedFee - ' + calculatedFee);
             const techfee = +calculatedFee * +fee_tech_percent;
-            // // // // // // console.log('calculatedFee - ' + calculatedFee);
+            // // // // // // // // console.log('calculatedFee - ' + calculatedFee);
             calculatedFee = +calculatedFee + +techfee;
-            // // // // // // console.log('calculatedFee - ' + calculatedFee);
+            // // // // // // // // console.log('calculatedFee - ' + calculatedFee);
             calculatedFee = +calculatedFee + +cFee;
-            // // // // // // console.log('calculatedFee - ' + calculatedFee);
+            // // // // // // // // console.log('calculatedFee - ' + calculatedFee);
             calculatedFee = +calculatedFee + +SMIF;
-            // // // // // // console.log('calculatedFee - ' + calculatedFee);
-            // // // // // // console.log('BL total - ' + calculatedFee);
+            // // // // // // // // console.log('calculatedFee - ' + calculatedFee);
+            // // // // // // // // console.log('BL total - ' + calculatedFee);
             return [this.roundIt(+calculatedFee, 2), SMIF, cFee, techfee];
         } else {
             return [0, 0, 0, 0];
@@ -1758,13 +1758,13 @@ export class GenericServices {
     //     return this.roundIt((0.65 * feebase), 2);
     // }
     getFeeBase(rates: BuildingFeeBPSchedule[], value: number): number {
-        // // // // // // // // // // // // console.log(rates);
-        // // // // // // // // // // // // console.log(value);
+        // // // // // // // // // // // // // // console.log(rates);
+        // // // // // // // // // // // // // // console.log(value);
         if (value >= 1000000000) {
             value = 1000000000;
         }
         let BPS: BuildingFeeBPSchedule = rates.filter(x => (value >= x.Minimum && value <= x.Maximum))[0];
-        // // // // // // // // // // // // console.log(BPS);
+        // // // // // // // // // // // // // // console.log(BPS);
         let maxV = 0;
         let r = 0;
         if (typeof BPS === 'undefined') {
@@ -1773,9 +1773,9 @@ export class GenericServices {
         } else {
             maxV = value;
         }
-        // // // // // // // // // // // // console.log(+BPS.Rate);
-        // // // // // // // // // // // // console.log(+BPS.Minimum);
-        // // // // // // // // // // // // console.log(+BPS.Increment);
+        // // // // // // // // // // // // // // console.log(+BPS.Rate);
+        // // // // // // // // // // // // // // console.log(+BPS.Minimum);
+        // // // // // // // // // // // // // // console.log(+BPS.Increment);
         const subNum = +BPS.Rate * ((+BPS.Minimum - 1) / +BPS.Increment);
         const addNum = +BPS.Rate * Math.ceil(+maxV / +BPS.Increment);
         // if (Number.isNaN(addNum) || Number.isNaN(subNum)) {
@@ -1783,8 +1783,8 @@ export class GenericServices {
         // } else {
         r = (addNum - subNum);
         // }
-        // // // // // // // // // // // // // console.log(addNum);
-        // // // // // // // // // // // // // console.log(subNum);
+        // // // // // // // // // // // // // // // console.log(addNum);
+        // // // // // // // // // // // // // // // console.log(subNum);
         if (maxV === BPS.Minimum) {
             r = +BPS.Base;
         } else {
@@ -1887,7 +1887,7 @@ export class GenericServices {
         const r: string[] = [];
         r[0] = x.join(' ');
         r[1] = t;
-        // // // // // // // // // // // // // // // // // // // console.log(r);
+        // // // // // // // // // // // // // // // // // // // // // console.log(r);
         return r;
     }
     replaceObjectWithinArray(arr: object[], _old: object, _new: object): object[] {
@@ -1940,8 +1940,8 @@ export class GenericServices {
     }
     checkIfElementInArray(elem: any, arr: any[]): boolean {
         let r = false;
-        // // // // // // // // console.log(elem);
-        // // // // // // // // console.log(arr);
+        // // // // // // // // // // console.log(elem);
+        // // // // // // // // // // console.log(arr);
         arr.map(e => {
             if (JSON.stringify(elem) === JSON.stringify(e)) {
                 r = true;
@@ -1962,7 +1962,7 @@ export class GenericServices {
                 + (decimalCount ? decimal + Math.abs(amount -
                     Number(i)).toFixed(decimalCount).slice(2) : '');
         } catch (e) {
-            // // // // // // // console.log(e);
+            // // // // // // // // // console.log(e);
         }
     }
     checkIfOKToRunFromButton(caller: string, buttonnumber: number, modeoption: string): boolean {
@@ -2103,8 +2103,8 @@ export class PreviousRouteService {
 
 // // Call subscribe() to start listening for updates.
 // const locationsSubscription = locations.subscribe({
-//   next(position) { // // // // // // // // // // // // // // // // // // // // // // // // console.log('Current Position: ', position); },
-//   error(msg) { // // // // // // // // // // // // // // // // // // // // // // // // console.log('Error Getting Location: ', msg); }
+//   next(position) { // // // // // // // // // // // // // // // // // // // // // // // // // // console.log('Current Position: ', position); },
+//   error(msg) { // // // // // // // // // // // // // // // // // // // // // // // // // // console.log('Error Getting Location: ', msg); }
 // });
 
 // // Stop listening for location after 10 seconds

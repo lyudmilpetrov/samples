@@ -12,8 +12,8 @@
       "@app/shared/*": [
         "./src/app/shared/*"
       ],
-      "@app/signalr/*": [
-        "./src/app/signalr/*"
+      "@app/signalr-core/*": [
+        "./src/app/signalr-core/*"
       ],
       "@env/*": [
         "./src/enviroments/*"

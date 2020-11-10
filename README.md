@@ -6,6 +6,9 @@ https://github.com/Janghyun1230/Speaker_Verification
 
 https://github.com/MohamadMerchant/Voice-Authentication-and-Face-Recognition
 
+ng serve --prod=true --watch=true
+
+
 
 # SpeechRecognition
 So let’s get started. Initial step is to convert the existing saved_model or frozen model to model.json. For conversion we’ll be using tensorflowjs_converter

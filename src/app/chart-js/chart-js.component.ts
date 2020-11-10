@@ -13,6 +13,7 @@ import { GeneralChartServices, ObservableAsService } from './services/data-servi
 })
 export class ChartJSComponent implements OnInit, OnDestroy {
   @ViewChild('myIdentifier') myIdentifier: ElementRef;
+  breakpoint: number;
   showdata = false;
   forSlider_Min: number;
   forSlider_Max: number;
@@ -68,7 +69,10 @@ export class ChartJSComponent implements OnInit, OnDestroy {
     });
   }
   ngOnInit() {
-    // 'called');
+    this.breakpoint = (window.innerWidth <= 400) ? 1 : 2;
+  }
+  onResize(event) {
+    this.breakpoint = (event.target.innerWidth <= 4) ? 1 : 2;
   }
   ngOnDestroy() {
     if (this.Line_Sample1_Subscription) {

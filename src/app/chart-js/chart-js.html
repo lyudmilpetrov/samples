@@ -3,7 +3,7 @@
     <div style="margin-left: 5%; margin-right: 5%;">
         <app-dashboards-slider [id]="forSlider_1"></app-dashboards-slider>
     </div>
-    <mat-grid-list cols="2" rowHeight="250px">
+    <mat-grid-list [cols]="breakpoint" rowHeight="250px" (window:resize)="onResize($event)">
         <!--Table-->
         <mat-grid-tile [colspan]="1" [rowspan]="3">
             <app-dashboards-card #myIdentifier title="{{titleForCard0}}">

@@ -1,4 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { OverlayMessageComponent } from '@app/components/overlay-message/overlay-message.component';
 import * as faceapi from 'face-api.js';
 import { OfflineService } from '../services/services';
 import { WebWorker } from './web_worker';
@@ -29,7 +32,6 @@ export class FaceRecognitionComponent implements OnInit {
     @ViewChild('video', { static: true }) videoElement: ElementRef;
     @ViewChild('canvasLast', { static: true }) canvasLast: ElementRef;
     @ViewChild('canvasPrior', { static: true }) canvasPrior: ElementRef;
-    show = true;
     MODEL_URL = '../../assets/weights';
     constraints = {
         // video: true
@@ -61,11 +63,19 @@ export class FaceRecognitionComponent implements OnInit {
     result = 0;
     valueInput = '';
     images = [];
-    matched = 'Not matched yet!';
+    matched = 'These faces belong to different people!';
     maxDescriptorDistance = 0.4;
     IsWait = false;
-    constructor(private renderer: Renderer2, private os: OfflineService) { }
+    breakpoint: number;
+    switchimage = 1;
+    constructor(
+        private renderer: Renderer2,
+        private os: OfflineService,
+        private dialog: MatDialog,
+        private snackBar: MatSnackBar) { }
     ngOnInit() {
+        this.breakpoint = (window.innerWidth <= 400) ? 1 : 2;
+        // this.openDialog();
         this.startCamera();
         Promise.all([
             this.loadF(this.MODEL_URL, 'loadFaceDetectionModel'),
@@ -79,6 +89,9 @@ export class FaceRecognitionComponent implements OnInit {
             console.log('done loading');
             console.log(faceapi);
         });
+    }
+    onResize(event) {
+        this.breakpoint = (event.target.innerWidth <= 4) ? 1 : 2;
     }
     async loadF(url: string, call: string) {
         await faceapi[call](url);
@@ -159,6 +172,15 @@ export class FaceRecognitionComponent implements OnInit {
         this.renderer.setProperty(this.canvasPrior.nativeElement, 'height', this.videoHeight);
         this.canvasPrior.nativeElement.getContext('2d').drawImage(this.videoElement.nativeElement, 0, 0);
     }
+    capture() {
+        if (this.switchimage === 1) {
+            this.switchimage = 2;
+            this.captureImageFirst();
+        } else {
+            this.switchimage = 1;
+            this.captureImageSecond();
+        }
+    }
     async compareImages() {
         this.IsWait = true;
         // const imagebase64data = imageprior;
@@ -169,8 +191,8 @@ export class FaceRecognitionComponent implements OnInit {
             this.videoWidth);
         console.log(x);
         if (x <= this.maxDescriptorDistance) {
-            this.matched = 'There is 100% matched!';
-
+            this.matched = 'The faces belong to one person!';
+            this.openDialog(this.matched);
         }
         this.IsWait = false;
     }
@@ -185,7 +207,7 @@ export class FaceRecognitionComponent implements OnInit {
         Object.keys(descObj).forEach(key => {
             arrDesc.push(descObj[key]);
         });
-        const faceDescriptorCache = [Float32Array.from(arrDesc, z => z)];
+        // const faceDescriptorCache = [Float32Array.from(arrDesc, z => z)];
         // https://itnext.io/face-api-js-javascript-api-for-face-recognition-in-the-browser-with-tensorflow-js-bcc2a6c4cf07
         // // For all faces
         // const fullFaceDescriptions = await faceapi.detectAllFaces(canvas).withFaceLandmarks().withFaceDescriptors();
@@ -221,5 +243,29 @@ export class FaceRecognitionComponent implements OnInit {
         // tslint:disable-next-line: no-string-literal
         r1 = results[0]['_distance'];
         return r1;
+    }
+    openDialog(messageStr: string) {
+        const dialogRef = this.dialog.open(OverlayMessageComponent, {
+            data: {
+                message: messageStr,
+                buttonText: {
+                    ok: 'Save',
+                    cancel: 'No'
+                }
+            }
+        });
+        // const snack = this.snackBar.open('Snack bar open before dialog');
+        dialogRef.afterClosed().subscribe((confirmed: any) => {
+            // if (confirmed) {
+            //     // snack.dismiss();
+            //     // const a = document.createElement('a');
+            //     // a.click();
+            //     // a.remove();
+            //     // snack.dismiss();
+            //     // this.snackBar.open('Closing snack bar in a few seconds', 'Fechar', {
+            //     //     duration: 2,
+            //     // });
+            // }
+        });
     }
 }

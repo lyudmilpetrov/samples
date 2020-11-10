@@ -6,6 +6,7 @@ import { FaceRecognitionRoutes } from './face-recognition.routes';
 import { FaceRecognitionComponent } from './face-recognition.component';
 import { MaterialModule } from '@app/shared/material.module';
 import { OfflineService } from '../services/services';
+import { OverlayMessageComponent } from '@app/components/overlay-message/overlay-message.component';
 @NgModule({
     imports: [
         RouterModule.forChild(FaceRecognitionRoutes),
@@ -15,7 +16,7 @@ import { OfflineService } from '../services/services';
         MaterialModule
     ],
     declarations: [
-        FaceRecognitionComponent
+        FaceRecognitionComponent, OverlayMessageComponent
     ],
     providers: [OfflineService],
     schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]

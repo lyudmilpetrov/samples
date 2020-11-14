@@ -11,9 +11,9 @@
             "prefix": "app",
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:browser",
+                    "builder": "@angular-builders/custom-webpack:browser",
                     "options": {
-                        "outputPath": "docs/",
+                        "outputPath": "C:\\Users\\ljudm\\source\\repos\\TemplatesNet5\\TemplatesNet5\\wwwroot\\",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": "src/polyfills.ts",
@@ -23,13 +23,17 @@
                             "src/favicon.ico",
                             "src/assets",
                             "src/assets/json",
-                            "src/assets/weights"
+                            "src/assets/weights",
+                            "src/app/face-recognition/models"
                         ],
                         "styles": [
                             "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
                             "src/styles.css"
                         ],
-                        "scripts": []
+                        "scripts": [],
+                        "customWebpackConfig": {
+                            "path": "./custom-webpack.config.js"
+                        }
                     },
                     "configurations": {
                         "production": {

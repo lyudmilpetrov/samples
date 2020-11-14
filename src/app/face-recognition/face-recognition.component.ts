@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, ChangeDetectionStrategy, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -7,6 +8,7 @@ import { OfflineService } from '../services/services';
 import { WebWorker } from './web_worker';
 // https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API
 // https://school.geekwall.in/p/Hy29kFEGm/face-recognition-in-the-browser-with-tensorflow-js-javascript
+// https://rubikscode.net/2019/09/09/integration-of-tensorflow-model-into-angular-application/
 export interface IMtcnnOptions {
     minFaceSize?: number;
     scaleFactor?: number;
@@ -72,23 +74,95 @@ export class FaceRecognitionComponent implements OnInit {
         private renderer: Renderer2,
         private os: OfflineService,
         private dialog: MatDialog,
-        private snackBar: MatSnackBar) { }
+        private snackBar: MatSnackBar,
+        private httpClient: HttpClient) {
+
+        // const data = require('src/file.json');
+        // console.log("Json data : ", JSON.stringify(data));
+        console.log('! 1 ');
+        console.log(window.location.href);
+        if (window.location.href !== 'http://localhost:4200/face-recognition') {
+            console.log('! 2');
+            console.log(window.location.href);
+            // this.MODEL_URL = window.location.href.replace('face-recognition', '') + 'assets/weights';
+            this.MODEL_URL = 'assets/weights';
+        } else {
+            this.MODEL_URL = window.location.href + this.MODEL_URL;
+        }
+        console.log('! 3');
+        console.log(this.MODEL_URL);
+        // this.loadF(this.MODEL_URL, 'loadSsdMobilenetv1Model');
+        this.httpClient.get(this.MODEL_URL + '/ssd_mobilenetv1_model-weights_manifest.json').subscribe(d => {
+            console.log(d[0].weights);
+            // const float32 = new Float32Array();
+            // let i = 0;
+            // const x = d[0].weights.map(y => {
+            //     console.log(y);
+            //     float32[i] = y;
+            //     i++;
+            // });
+            // console.log(float32);
+            // console.log(Float32Array.of(d[0].weights));
+            faceapi.nets.ssdMobilenetv1.load(this.MODEL_URL);
+        });
+        this.httpClient.get(this.MODEL_URL + '/face_landmark_68_model-weights_manifest.json').subscribe(d => {
+            console.log(d);
+            faceapi.nets.faceLandmark68Net.loadFromUri(this.MODEL_URL);
+        });
+        this.httpClient.get(this.MODEL_URL + '/face_landmark_68_model-weights_manifest.json').subscribe(d => {
+            console.log(d);
+            faceapi.nets.faceRecognitionNet.loadFromUri(this.MODEL_URL);
+        });
+        // // faceapi.loadSsdMobilenetv1Model(this.MODEL_URL).then((x1) => {
+        // //     console.log(x1);
+        // //     faceapi.loadFaceDetectionModel(this.MODEL_URL).then((x2) => {
+        // //         console.log(x2);
+        // //         faceapi.loadFaceLandmarkModel(this.MODEL_URL).then((x3) => {
+        // //             console.log(x3);
+        // //             faceapi.loadFaceRecognitionModel(this.MODEL_URL);
+        // //         });
+        // //     });
+        // // });
+
+        // faceapi.loadFaceLandmarkModel(this.MODEL_URL);
+        // faceapi.loadFaceRecognitionModel(this.MODEL_URL);
+        // const json = require(this.MODEL_URL + '/face_recognition_model-weights_manifest.json');
+        // console.log(json);
+        // Promise.all([
+        //     this.loadF(this.MODEL_URL, 'loadSsdMobilenetv1Model')
+        //         .then(x => {
+        //             console.log(x);
+        //         })
+        //         .catch(err => { console.log(err); })
+        //         .finally(() => { console.log('done'); }),
+        //     this.loadF(this.MODEL_URL, 'loadFaceDetectionModel').then(x => {
+        //         console.log(x);
+        //     })
+        //         .catch(err => { console.log(err); })
+        //         .finally(() => { console.log('done'); }),
+        //     this.loadF(this.MODEL_URL, 'loadFaceLandmarkModel').then(x => {
+        //         console.log(x);
+        //     })
+        //         .catch(err => { console.log(err); })
+        //         .finally(() => { console.log('done'); }),
+        //     this.loadF(this.MODEL_URL, 'loadFaceRecognitionModel').then(x => {
+        //         console.log(x);
+        //     })
+        //         .catch(err => { console.log(err); })
+        //         .finally(() => { console.log('done'); })
+        // ]).then((values) => {
+        //     console.log(values);
+        // }).catch(err => console.log(err)).finally(() => {
+        //     console.log('done loading');
+        //     console.log(faceapi);
+        // });
+    }
     ngOnInit() {
+        console.log(faceapi);
         this.breakpoint = (window.innerWidth <= 400) ? 1 : 2;
         // this.openDialog();
         this.startCamera();
-        Promise.all([
-            this.loadF(this.MODEL_URL, 'loadFaceDetectionModel'),
-            this.loadF(this.MODEL_URL, 'loadFaceLandmarkModel'),
-            this.loadF(this.MODEL_URL, 'loadFaceRecognitionModel')
-            // ,
-            // this.loadF(this.MODEL_URL, 'loadMtcnnModel')
-        ]).then((values) => {
-            console.log(values);
-        }).catch(err => console.log(err)).finally(() => {
-            console.log('done loading');
-            console.log(faceapi);
-        });
+
     }
     onResize(event) {
         this.breakpoint = (event.target.innerWidth <= 4) ? 1 : 2;
@@ -113,55 +187,6 @@ export class FaceRecognitionComponent implements OnInit {
             alert('Camera not available.');
         }
     }
-    // capture() {
-    //     // if (this.images.length !== 0) {
-    //     //     let imagebase64dataprior;
-    //     //     imagebase64dataprior = this.canvasLast.nativeElement.toDataURL('image/png');
-    //     //     this.images.push(imagebase64dataprior);
-    //     // }
-    //     this.renderer.setProperty(this.canvasLast.nativeElement, 'width', this.videoWidth);
-    //     this.renderer.setProperty(this.canvasLast.nativeElement, 'height', this.videoHeight);
-    //     this.renderer.setProperty(this.canvasPrior.nativeElement, 'width', this.videoWidth);
-    //     this.renderer.setProperty(this.canvasPrior.nativeElement, 'height', this.videoHeight);
-    //     this.canvasLast.nativeElement.getContext('2d').drawImage(this.videoElement.nativeElement, 0, 0);
-
-
-
-    //     console.log(this.canvasLast.nativeElement.getContext('2d').canvas.clientHeight);
-    //     console.log(this.canvasLast.nativeElement.getContext('2d').canvas.clientWidth);
-    //     const height = this.canvasLast.nativeElement.getContext('2d').canvas.clientHeight;
-    //     const width = this.canvasLast.nativeElement.getContext('2d').canvas.clientWidth;
-    //     let imagebase64data;
-    //     if (this.images.length <= 0) {
-    //         imagebase64data = this.canvasLast.nativeElement.toDataURL('image/png');
-    //     } else {
-    //         console.log('inside second');
-    //         imagebase64data = JSON.parse(this.images[this.images.length - 1]);
-    //     }
-    //     const img = new Image();
-    //     img.src = imagebase64data;
-    //     img.width = this.videoWidth;
-    //     img.height = this.videoHeight;
-    //     // if (this.images.length >= 1) {
-    //     img.onload = () => {
-    //         const hRatio = this.canvasPrior.nativeElement.width / img.width;
-    //         const vRatio = this.canvasPrior.nativeElement.height / img.height;
-    //         const ratio = Math.min(hRatio, vRatio);
-    //         const centerShiftX = (this.canvasPrior.nativeElement.width - img.width * ratio) / 2;
-    //         const centerShiftY = (this.canvasPrior.nativeElement.height - img.height * ratio) / 2;
-    //         this.canvasPrior.nativeElement.getContext('2d')
-    //             .clearRect(0, 0, this.canvasPrior.nativeElement.width, this.canvasPrior.nativeElement.height);
-    //         this.canvasPrior.nativeElement.getContext('2d')
-    //             .drawImage(img, 0, 0, img.width, img.height,
-    //                 centerShiftX, centerShiftY, img.width * ratio, img.height * ratio);
-    //     };
-    //     // }
-    //     if (this.images.length >= 1) {
-    //         this.images.pop();
-    //     }
-    //     this.images.push(JSON.stringify(imagebase64data));
-    //     console.log(this.images);
-    // }
     captureImageFirst() {
         this.renderer.setProperty(this.canvasLast.nativeElement, 'width', this.videoWidth);
         this.renderer.setProperty(this.canvasLast.nativeElement, 'height', this.videoHeight);
@@ -183,7 +208,37 @@ export class FaceRecognitionComponent implements OnInit {
     }
     async compareImages() {
         this.IsWait = true;
+        // Promise.all([
+        //     // this.loadF(this.MODEL_URL, 'loadSsdMobilenetv1Model'),
+        //     this.loadF(this.MODEL_URL, 'loadFaceDetectionModel'),
+        //     this.loadF(this.MODEL_URL, 'loadFaceLandmarkModel'),
+        //     this.loadF(this.MODEL_URL, 'loadFaceRecognitionModel')
+        // ]).then((values) => {
+        //     console.log(values);
+        //     calc(this);
+        // })
+        //     .catch(err => console.log(err))
+        //     .finally(() => {
+        //         console.log('done loading');
+        //         console.log(faceapi);
+        //         // calc(this);
+        //     });
+        // async function calc(t: any) {
+        //     const x = await t.computeSingleFaceDescriptors(
+        //         t.canvasLast.nativeElement,
+        //         t.canvasPrior.nativeElement,
+        //         'Lyudmil', t.videoHeight,
+        //         t.videoWidth);
+        //     console.log(x);
+        //     if (x <= t.maxDescriptorDistance) {
+        //         t.matched = 'The faces belong to one person!';
+        //         t.openDialog(t.matched);
+        //     }
+        //     t.IsWait = false;
+        // }
         // const imagebase64data = imageprior;
+        // setTimeout(async () => {
+        //     this.IsWait = true;
         const x = await this.computeSingleFaceDescriptors(
             this.canvasLast.nativeElement,
             this.canvasPrior.nativeElement,
@@ -193,20 +248,23 @@ export class FaceRecognitionComponent implements OnInit {
         if (x <= this.maxDescriptorDistance) {
             this.matched = 'The faces belong to one person!';
             this.openDialog(this.matched);
+            this.IsWait = false;
         }
+        // }, 200);
         this.IsWait = false;
     }
     // The neural nets accept HTML image, canvasLast or video elements or tensors as inputs.
     async computeSingleFaceDescriptors(
         canvaslast: any, canvasprior: any, name: string,
         h: number, w: number): Promise<number> {
+        this.IsWait = true;
         const d: IDimensions = { width: w, height: h };
         let r1 = 1;
-        const descObj = this.os.getCache('localStorage', 'desc', 'object')[0];
-        const arrDesc = [];
-        Object.keys(descObj).forEach(key => {
-            arrDesc.push(descObj[key]);
-        });
+        // const descObj = this.os.getCache('localStorage', 'desc', 'object')[0];
+        // const arrDesc = [];
+        // Object.keys(descObj).forEach(key => {
+        //     arrDesc.push(descObj[key]);
+        // });
         // const faceDescriptorCache = [Float32Array.from(arrDesc, z => z)];
         // https://itnext.io/face-api-js-javascript-api-for-face-recognition-in-the-browser-with-tensorflow-js-bcc2a6c4cf07
         // // For all faces

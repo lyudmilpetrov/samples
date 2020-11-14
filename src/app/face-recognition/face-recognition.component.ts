@@ -80,12 +80,12 @@ export class FaceRecognitionComponent implements OnInit {
         // const data = require('src/file.json');
         // console.log("Json data : ", JSON.stringify(data));
         console.log('! 1 ');
-        console.log(window.location.href);
+        console.log(this.MODEL_URL);
         if (window.location.href !== 'http://localhost:4200/face-recognition') {
-            console.log('! 2');
-            console.log(window.location.href);
             // this.MODEL_URL = window.location.href.replace('face-recognition', '') + 'assets/weights';
             this.MODEL_URL = 'assets/weights';
+            console.log('! 2');
+            console.log(this.MODEL_URL);
         } else {
             this.MODEL_URL = window.location.href + this.MODEL_URL;
         }

@@ -10,7 +10,7 @@ ng serve --prod=true --watch=true
 
 ng build --prod=true
 
-ng build --prod --aot --output-hashing none
+ng build --prod=true --aot=true --output-hashing none
 
 # SpeechRecognition
 So let’s get started. Initial step is to convert the existing saved_model or frozen model to model.json. For conversion we’ll be using tensorflowjs_converter
@@ -154,3 +154,14 @@ npm install @tensorflow/tfjs-core --save
 npm install @tensorflow/tfjs-converter --save
 npm install @tensorflow/tfjs-backend-wasm --save
 npm install @tensorflow/tfjs-backend-webgl --save
+
+PWA
+
+1) ng add @angular/pwa
+2) npm install http-server -g
+3) add "start-pwa": "ng build --prod && http-server -p 8080 -c-1 dist/speech-recognition" to package.json
+4) npm run start-pwa
+https://blog.angular-university.io/angular-service-worker/
+https://web.dev/creating-pwa-with-angular-cli/
+
+

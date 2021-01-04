@@ -72,6 +72,7 @@ export class FaceRecognitionComponent implements OnInit {
   IsWait = false;
   breakpoint: number;
   switchimage = 1;
+  showUpload = false;
   constructor(
     private renderer: Renderer2,
     private os: OfflineService,
@@ -79,6 +80,11 @@ export class FaceRecognitionComponent implements OnInit {
     private snackBar: MatSnackBar,
     private httpClient: HttpClient,
     private ngZone: NgZone) {
+      if (window.location.hostname === 'localhost') {
+        this.showUpload = true;
+      } else {
+        this.showUpload = false;
+      }
 
     // const data = require('src/file.json');
     // console.log("Json data : ", JSON.stringify(data));

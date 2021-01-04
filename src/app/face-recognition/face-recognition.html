@@ -42,8 +42,8 @@
             <mat-card-actions>
                 <mat-chip-list>
                     <mat-chip color="accent" selected="true" (click)="captureImageFirst()" class="pointer">Capture image from camera</mat-chip>
-                    <mat-chip color="accent" selected="true" class="pointer">
-                        <app-file-upload #first (complete)="onFileCompleteFirst($event)"></app-file-upload>
+                    <mat-chip color="accent" selected="true" class="pointer" *ngIf="showUpload">
+                        <app-file-upload (complete)="onFileCompleteFirst($event)" #first></app-file-upload>
                     </mat-chip>
                 </mat-chip-list>
             </mat-card-actions>
@@ -63,7 +63,7 @@
             <mat-card-actions>
                 <mat-chip-list>
                     <mat-chip color="accent" selected="true" (click)="captureImageSecond()" class="pointer">Capture image from camera</mat-chip>
-                    <mat-chip color="accent" selected="true" class="pointer">
+                    <mat-chip color="accent" selected="true" class="pointer" *ngIf="showUpload">
                         <app-file-upload (complete)="onFileCompleteSecond($event)" #second></app-file-upload>
                     </mat-chip>
                 </mat-chip-list>

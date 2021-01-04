@@ -20,7 +20,14 @@ export class MainNavComponent implements OnInit {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router) {
+    console.log(window.location.hostname);
+    if (window.location.hostname === 'localhost') {
+      this.menuItems = ['Chart.js', 'Face-Login', 'Face-Recognition', 'Face-Mesh', 'Maps'];
+    } else {
+      this.menuItems = ['Chart.js', 'Face-Recognition'];
+    }
+  }
   selected(s: string) {
     this.LabelStr = s;
     const x = s.toLocaleLowerCase().replace(' ', '').replace('.', '-');

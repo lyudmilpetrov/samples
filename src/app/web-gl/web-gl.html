@@ -1,0 +1,37 @@
+<div class="grid-container">
+    <!-- <h1 style="margin-left: 5%;">Visualization sample, please use the slider to check prior time periods, covering last 12 months as of the end of the month</h1> -->
+    <!-- <div style="margin-left: 5%; margin-right: 5%;">
+        <app-dashboards-slider [id]="forSlider_1"></app-dashboards-slider>
+    </div> -->
+    <mat-grid-list [cols]="breakpoint" rowHeight="250px" (window:resize)="onResize($event)">
+        <!--Table-->
+        <mat-grid-tile [colspan]="1" [rowspan]="3">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-subtitle>
+                        Title
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <!-- <div class="p-1">
+                    <video #video class="vid" autoplay muted></video>
+                </div> -->
+                <mat-card-content>
+                    <div id="canvas"></div>
+                </mat-card-content>
+            </mat-card>
+        </mat-grid-tile>
+        <!--Charts-->
+        <mat-grid-tile [colspan]="1" [rowspan]="2">
+            <!-- <app-dashboards-card title="{{titleForCard1}}">
+                <mat-spinner style="margin:0 auto;" mode="indeterminate" *ngIf="!showdata"></mat-spinner>
+                <app-dashboards-bar-chart [PassedInfo]="d2CI" *ngIf="showdata"></app-dashboards-bar-chart>
+            </app-dashboards-card> -->
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="1" [rowspan]="2">
+            <!-- <app-dashboards-card title="{{titleForCard2}}">
+                <mat-spinner style="margin:0 auto;" mode="indeterminate" *ngIf="!showdata"></mat-spinner>
+                <app-dashboards-bar-chart [PassedInfo]="d3CI" *ngIf="showdata"></app-dashboards-bar-chart>
+            </app-dashboards-card> -->
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>

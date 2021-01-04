@@ -22,40 +22,52 @@
             </mat-card-content>
             <mat-card-actions>
                 <mat-chip-list>
-                    <mat-chip color="accent" selected="true" (click)="captureImageFirst()" class="pointer">Capture First Image</mat-chip>
-                    <mat-chip color="accent" selected="true" (click)="captureImageSecond()" class="pointer">Capture Second Image</mat-chip>
+                    <mat-chip color="accent" selected="true" (click)="captureImageFirst()" class="pointer">Capture first image from camera</mat-chip>
+                    <mat-chip color="accent" selected="true" (click)="captureImageSecond()" class="pointer">Capture second image from camera</mat-chip>
                 </mat-chip-list>
             </mat-card-actions>
         </mat-card>
     </mat-grid-tile>
     <mat-grid-tile [colspan]="1" [rowspan]="2">
-        <mat-card (click)="captureImageFirst()">
+        <mat-card>
             <mat-card-header>
-                <mat-card-subtitle>First Image</mat-card-subtitle>
+                <mat-icon class="close-right" (click)="clearFirst()">cancel</mat-icon>
+                <mat-card-subtitle>First Image
+                </mat-card-subtitle>
             </mat-card-header>
-            <div class="p-1">
+            <div class="p-1" (click)="captureImageFirst()">
                 <canvas #canvasLast class="vid"></canvas>
             </div>
-            <mat-card-content>
-                <p>
-                    First captured image
-                </p>
-            </mat-card-content>
+            <mat-card-content (click)="captureImageFirst()"> </mat-card-content>
+            <mat-card-actions>
+                <mat-chip-list>
+                    <mat-chip color="accent" selected="true" (click)="captureImageFirst()" class="pointer">Capture image from camera</mat-chip>
+                    <mat-chip color="accent" selected="true" class="pointer">
+                        <app-file-upload #first (complete)="onFileCompleteFirst($event)"></app-file-upload>
+                    </mat-chip>
+                </mat-chip-list>
+            </mat-card-actions>
         </mat-card>
     </mat-grid-tile>
     <mat-grid-tile [colspan]="1" [rowspan]="2">
-        <mat-card (click)="captureImageSecond()">
+        <mat-card>
             <mat-card-header>
-                <mat-card-subtitle>Second Image</mat-card-subtitle>
+                <mat-icon class="close-right" (click)="clearSecond()">cancel</mat-icon>
+                <mat-card-subtitle>Second Image
+                </mat-card-subtitle>
             </mat-card-header>
-            <div class="p-1">
+            <div class="p-1" (click)="captureImageSecond()">
                 <canvas #canvasPrior class="vid"></canvas>
             </div>
-            <mat-card-content>
-                <p>
-                    Second captured image
-                </p>
-            </mat-card-content>
+            <mat-card-content (click)="captureImageSecond()"> </mat-card-content>
+            <mat-card-actions>
+                <mat-chip-list>
+                    <mat-chip color="accent" selected="true" (click)="captureImageSecond()" class="pointer">Capture image from camera</mat-chip>
+                    <mat-chip color="accent" selected="true" class="pointer">
+                        <app-file-upload (complete)="onFileCompleteSecond($event)" #second></app-file-upload>
+                    </mat-chip>
+                </mat-chip-list>
+            </mat-card-actions>
         </mat-card>
     </mat-grid-tile>
 </mat-grid-list>

@@ -18,7 +18,7 @@ import { RadarChartComponent } from './chart-js/components/radar-chart/radar-cha
 import { Globals } from './shared/globals';
 import { OfflineService } from './services/services';
 import { OverlayModule } from '@angular/cdk/overlay';
-
+import { ToastrService } from '@app/services/toastr.service';
 @NgModule({
 
   imports: [
@@ -46,7 +46,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
     RadarChartComponent,
     SliderComponent
   ],
-  providers: [Globals, TasksService, OfflineService],
+  providers: [Globals, TasksService, OfflineService, ToastrService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })

@@ -6,10 +6,13 @@ import { ChartJSComponent } from './chart-js/chart-js.component';
 export const routes: Routes = [
   { path: '', redirectTo: 'chart-js', pathMatch: 'full' },
   { path: 'chart-js', component: ChartJSComponent },
+  { path: 'face-login', loadChildren: () => import('./face-login/face-login.module').then(m => m.FaceLoginModule) },
   { path: 'signalr-chat-app', loadChildren: () => import('./signalr-chat/signalr-chat.module').then(m => m.SignalRChatModule) },
   { path: 'face-recognition', loadChildren: () => import('./face-recognition/face-recognition.module').then(m => m.FaceRecognitionModule) },
-  { path: '**', redirectTo: 'chart-js', pathMatch: 'full' },
-
+  { path: 'web-gl', loadChildren: () => import('./web-gl/web-gl.module').then(m => m.WebGLModule) },
+  { path: 'face-mesh', loadChildren: () => import('./face-mesh/face-mesh.module').then(m => m.FaceMeshModule) },
+  { path: 'maps', loadChildren: () => import('./maps/maps.module').then(m => m.MapsModule) },
+  { path: '**', redirectTo: 'chart-js', pathMatch: 'full' }
 ];
 
 @NgModule({

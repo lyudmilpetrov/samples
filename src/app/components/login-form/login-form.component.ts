@@ -1,18 +1,24 @@
-import { Component, OnInit, Inject, NgZone, SkipSelf, Optional } from '@angular/core';
+import { Component, OnInit, Inject, NgZone, SkipSelf, Optional, Output, EventEmitter } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-    selector: 'app-overlay-message',
-    templateUrl: './overlay-message.component.html'
+    selector: 'app-login-form',
+    templateUrl: './login-form.component.html'
 })
-export class OverlayMessageComponent {
+export class LoginFormComponent {
+  form: FormGroup = new FormGroup({
+    username: new FormControl(''),
+    password: new FormControl(''),
+  });
+  @Output() submitEM = new EventEmitter();
     message = 'Are you sure?';
     confirmButtonText = 'Close';
     cancelButtonText = 'Cancel';
     constructor(
-        @Optional() @SkipSelf() parentModule: OverlayMessageComponent,
+        @Optional() @SkipSelf() parentModule: LoginFormComponent,
         @Inject(MAT_DIALOG_DATA) private data: any,
-        private dialogRef: MatDialogRef<OverlayMessageComponent>,
+        private dialogRef: MatDialogRef<LoginFormComponent>,
         private ngZone: NgZone) {
         this.ngZone.run(() => {
             if (data) {
@@ -29,5 +35,10 @@ export class OverlayMessageComponent {
         this.ngZone.run(() => {
             this.dialogRef.close('some info here');
         });
+    }
+    submit() {
+      if (this.form.valid) {
+        this.submitEM.emit(this.form.value);
+      }
     }
 }

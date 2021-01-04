@@ -1,15 +1,19 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ChangeDetectionStrategy, OnInit, ViewChild, ElementRef, Renderer2, NgZone } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, ViewChild, ElementRef, Renderer2, NgZone, Input, Output, EventEmitter } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FileUploadComponent } from '@app/components/file-upload/file-upload.component';
 import { OverlayMessageComponent } from '@app/components/overlay-message/overlay-message.component';
+import { LoginFormComponent } from '@app/components/login-form/login-form.component';
 import * as faceapi from 'face-api.js';
 import { OfflineService } from '../services/services';
-import { WebWorker } from './web_worker';
+import { ToastrService } from '@app/services/toastr.service';
+import { restrictedWords } from '@app/services/restrictedWordsValidators';
+// import { WebWorker } from './web_worker';
 // https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API
 // https://school.geekwall.in/p/Hy29kFEGm/face-recognition-in-the-browser-with-tensorflow-js-javascript
 // https://rubikscode.net/2019/09/09/integration-of-tensorflow-model-into-angular-application/
+
 export interface IMtcnnOptions {
   minFaceSize?: number;
   scaleFactor?: number;
@@ -27,15 +31,14 @@ export interface LabeledFaceDescriptors {
   _dimensions: IDimensions;
 }
 @Component({
-  templateUrl: './face-recognition.html',
-  styleUrls: ['./face-recognition.css'],
+  templateUrl: './face-login.html',
+  styleUrls: ['./face-login.css'],
   // // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FaceRecognitionComponent implements OnInit {
+export class FaceLoginComponent implements OnInit {
   @ViewChild('video', { static: true }) videoElement: ElementRef;
   @ViewChild('canvasLast', { static: true }) canvasLast: ElementRef<HTMLCanvasElement>;
   @ViewChild('canvasPrior', { static: true }) canvasPrior: ElementRef<HTMLCanvasElement>;
-  @ViewChild('second') secondUpload: FileUploadComponent;
   MODEL_URL = '../../assets/weights';
   constraints = {
     // video: true
@@ -72,7 +75,18 @@ export class FaceRecognitionComponent implements OnInit {
   IsWait = false;
   breakpoint: number;
   switchimage = 1;
+  username = new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z].*')]);
+  password = new FormControl('', [Validators.required, restrictedWords(['test', 'bar'])]);
+  profileForm: FormGroup = new FormGroup({
+    username: this.username,
+    password: this.password
+  });
+  hideLoginForm = false;
+  hidePassword = true;
+  panelOpenState = false;
+  currentUserName = '';
   constructor(
+    private toastr: ToastrService,
     private renderer: Renderer2,
     private os: OfflineService,
     private dialog: MatDialog,
@@ -161,11 +175,66 @@ export class FaceRecognitionComponent implements OnInit {
     });
   }
   ngOnInit() {
+    // this.toastr.setTopCentered();
+    // this.toastr.success('open now', 'title');
     console.log(faceapi);
     this.breakpoint = (window.innerWidth <= 400) ? 1 : 2;
     // this.openDialog();
-    this.startCamera();
+    // this.startCamera();
+    // this.openLoginForm('now');
 
+
+  }
+  errorHandling = (control: string, error: string) => {
+    return this.profileForm.controls[control].hasError(error);
+  }
+  loginWithPassword(formvalues) {
+    console.log(formvalues);
+    if (this.profileForm.valid) {
+      if (formvalues.username.replace(/ +/g, ' ').length >= 1 && formvalues.password.replace(/ +/g, ' ').length) {
+        let obj = {
+          username: formvalues.username,
+          password: formvalues.password
+        };
+        this.currentUserName = formvalues.username;
+        this.os.setCache('localStorage', formvalues.username.replace(/ +/g, ' '), obj, 'object');
+        this.hideLoginForm = true;
+      }
+    } else {
+
+    }
+  }
+  loginWithFace(formvalues) {
+    console.log(formvalues);
+  }
+  openLoginForm(messageStr: string) {
+    const dialogRef = this.dialog.open(LoginFormComponent, {
+      width: '60vw',
+      maxWidth: '60vw',
+      height: '60vh',
+      maxHeight: '60vh',
+      data: {
+        message: messageStr,
+        buttonText: {
+          ok: 'Save',
+          cancel: 'No'
+        }
+      }
+    });
+    // const snack = this.snackBar.open('Snack bar open before dialog');
+    dialogRef.afterClosed().subscribe((confirmed: any) => {
+      console.log(confirmed);
+      // if (confirmed) {
+      //     // snack.dismiss();
+      //     // const a = document.createElement('a');
+      //     // a.click();
+      //     // a.remove();
+      //     // snack.dismiss();
+      //     // this.snackBar.open('Closing snack bar in a few seconds', 'Fechar', {
+      //     //     duration: 2,
+      //     // });
+      // }
+    });
   }
   onResize(event) {
     this.breakpoint = (event.target.innerWidth <= 4) ? 1 : 2;
@@ -214,23 +283,24 @@ export class FaceRecognitionComponent implements OnInit {
     this.ngZone.run(() => {
       this.IsWait = true;
     });
-    setTimeout(async () => {
-      const x = await this.computeSingleFaceDescriptors(
-        this.canvasLast.nativeElement,
-        this.canvasPrior.nativeElement,
-        'Lyudmil', this.videoHeight,
-        this.videoWidth);
-      console.log(x);
-      if (x <= this.maxDescriptorDistance) {
-        this.matched = 'The faces belong to one person!';
-        this.openDialog(this.matched);
-        this.IsWait = false;
-      } else {
-        this.matched = 'It is hard to tell if that is the same person!';
-        this.openDialog(this.matched);
-        this.IsWait = false;
-      }
-    }, 20);
+    // setTimeout(() => {
+    const x = await this.computeSingleFaceDescriptors(
+      this.canvasLast.nativeElement,
+      this.canvasPrior.nativeElement,
+      'Lyudmil', this.videoHeight,
+      this.videoWidth);
+    console.log(x);
+    if (x <= this.maxDescriptorDistance) {
+      this.matched = 'The faces belong to one person!';
+      this.openDialog(this.matched);
+      this.IsWait = false;
+    } else {
+      this.matched = 'It is hard to tell if that is the same person!';
+      this.openDialog(this.matched);
+      this.IsWait = false;
+    }
+
+    // }, 200);
     // Promise.all([
     //     // this.loadF(this.MODEL_URL, 'loadSsdMobilenetv1Model'),
     //     this.loadF(this.MODEL_URL, 'loadFaceDetectionModel'),
@@ -338,7 +408,8 @@ export class FaceRecognitionComponent implements OnInit {
       // }
     });
   }
-  onFileCompleteFirst(data: any) {
+  onFileComplete(data: any) {
+    console.log(data);
     const img = new Image();
     img.src = data.result;
     img.onload = () => {
@@ -364,42 +435,10 @@ export class FaceRecognitionComponent implements OnInit {
       }
       this.canvasLast.nativeElement.height = imgHeight;
       this.canvasLast.nativeElement.width = imgWidth;
-      this.clearFirst();
       this.canvasLast.nativeElement.getContext('2d').
         drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, imgWidth, imgHeight);
       // this.canvasLast.nativeElement.getContext('2d').drawImage(img, 0, 0, 100, 100 *
       //     this.canvasLast.nativeElement.height / this.canvasLast.nativeElement.width);
-    };
-  }
-  onFileCompleteSecond(data: any) {
-    const img = new Image();
-    img.src = data.result;
-    img.onload = () => {
-      let imgWidth = img.naturalWidth;
-      const screenWidth = this.canvasPrior.nativeElement.width;
-      let scaleX = 1;
-      if (imgWidth > screenWidth) {
-        scaleX = screenWidth / imgWidth;
-      }
-      let imgHeight = img.naturalHeight;
-      const screenHeight = this.canvasPrior.nativeElement.height;
-      let scaleY = 1;
-      if (imgHeight > screenHeight) {
-        scaleY = screenHeight / imgHeight;
-      }
-      let scale = scaleY;
-      if (scaleX < scaleY) {
-        scale = scaleX;
-      }
-      if (scale < 1) {
-        imgHeight = imgHeight * scale;
-        imgWidth = imgWidth * scale;
-      }
-      this.canvasPrior.nativeElement.height = imgHeight;
-      this.canvasPrior.nativeElement.width = imgWidth;
-      this.clearSecond();
-      this.canvasPrior.nativeElement.getContext('2d').
-        drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, imgWidth, imgHeight);
     };
   }
   clearFirst() {
@@ -412,7 +451,5 @@ export class FaceRecognitionComponent implements OnInit {
     context.clearRect(0, 0, context.canvas.width, context.canvas.height);
     context.restore();
   }
-  ngAfterViewInit() {
-    console.log(this.secondUpload);
-  }
+
 }

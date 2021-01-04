@@ -15,7 +15,7 @@ export class MainNavComponent implements OnInit {
       map(result => result.matches),
       shareReplay()
     );
-  menuItems = ['Chart.js', 'SignalR-Chat-App', 'Face-Recognition'];
+  menuItems = ['Chart.js', 'Face-Login', 'Face-Recognition', 'Face-Mesh', 'Maps'];
   LabelStr = this.menuItems[0];
   constructor(
     private breakpointObserver: BreakpointObserver,

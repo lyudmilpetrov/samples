@@ -142,3 +142,15 @@ https://www.gatsbyjs.com/docs/how-gatsby-works-with-github-pages/
 
 
 ng build --prod --output-path docs --base-href https://lyudmilpetrov.github.io/samples/
+https://storage.googleapis.com/tfjs-models/demos/face-landmarks-detection/index.html
+
+Ading facemash
+https://github.com/tensorflow/tfjs-models/tree/master/face-landmarks-detection
+
+
+npm install @tensorflow-models/facemesh --save
+npm install @tensorflow-models/face-landmarks-detection --save
+npm install @tensorflow/tfjs-core --save
+npm install @tensorflow/tfjs-converter --save
+npm install @tensorflow/tfjs-backend-wasm --save
+npm install @tensorflow/tfjs-backend-webgl --save

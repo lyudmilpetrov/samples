@@ -1,0 +1,19 @@
+app-login-form ::ng-deep .mat-focused .mat-form-field-label {
+    /*change color of label*/
+    color: green !important;
+}
+
+app-login-form ::ng-deep .mat-form-field-underline {
+    /*change color of underline*/
+    background-color: green !important;
+}
+
+app-login-form ::ng-deep .mat-form-field-ripple {
+    /*change color of underline when focused*/
+    background-color: green !important;
+}
+
+app-login-form ::ng-deep mat-form-field {
+    min-width: 50vw !important;
+    color: green !important;
+}

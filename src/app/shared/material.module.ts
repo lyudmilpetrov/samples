@@ -1,6 +1,6 @@
 // material.module.ts
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { MAT_LABEL_GLOBAL_OPTIONS, MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import {  MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -46,7 +46,6 @@ const materialModules = [
     CdkTreeModule,
     MatNativeDateModule,
     MatAutocompleteModule,
-    MatBadgeModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,

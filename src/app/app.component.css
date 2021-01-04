@@ -5,3 +5,7 @@
 .grid-container {
     margin: 20px;
 }
+
+.full-width-dialog .mat-dialog-container {
+    max-width: 80vw !important;
+}

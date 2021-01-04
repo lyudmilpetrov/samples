@@ -18,9 +18,14 @@ import { RadarChartComponent } from './chart-js/components/radar-chart/radar-cha
 import { Globals } from './shared/globals';
 import { OfflineService } from './services/services';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { ToastrService } from '@app/services/toastr.service';
-@NgModule({
+// import { ToastrService } from '@app/services/toastr.service';
+import { Toastr, TOASTR_TOKEN } from '@app/services/toastr.service';
+import * as toastr from 'toastr';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+// const toastr = window['toastr'];
 
+@NgModule({
   imports: [
     AppRoutingModule,
     BrowserModule,
@@ -32,9 +37,10 @@ import { ToastrService } from '@app/services/toastr.service';
     HttpClientModule,
     OverlayModule,
     HttpClientXsrfModule.withOptions({
-        cookieName: 'Building-App-Xsrf-Cookie',
-        headerName: 'Building-App-Xsrf-Header'
-    })
+      cookieName: 'Building-App-Xsrf-Cookie',
+      headerName: 'Building-App-Xsrf-Header'
+    }),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   declarations: [
     AppComponent,
@@ -46,7 +52,10 @@ import { ToastrService } from '@app/services/toastr.service';
     RadarChartComponent,
     SliderComponent
   ],
-  providers: [Globals, TasksService, OfflineService, ToastrService],
+  providers: [Globals, TasksService, OfflineService,
+    //  ToastrService
+    { provide: TOASTR_TOKEN, useValue: toastr }
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })

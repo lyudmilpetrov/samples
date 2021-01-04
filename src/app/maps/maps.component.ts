@@ -7,7 +7,7 @@ import { OverlayMessageComponent } from '@app/components/overlay-message/overlay
 import { LoginFormComponent } from '@app/components/login-form/login-form.component';
 import * as faceapi from 'face-api.js';
 import { OfflineService } from '../services/services';
-import { ToastrService } from '@app/services/toastr.service';
+// import { ToastrService } from '@app/services/toastr.service';
 import { restrictedWords } from '@app/services/restrictedWordsValidators';
 // https://timdeschryver.dev/blog/google-maps-as-an-angular-component
 // https://nominatim.openstreetmap.org/
@@ -38,7 +38,7 @@ export class MapsComponent implements OnInit, AfterViewInit {
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
   constructor(
-    private toastr: ToastrService,
+    // private toastr: ToastrService,
     private renderer: Renderer2,
     private os: OfflineService,
     private dialog: MatDialog,
@@ -63,10 +63,10 @@ export class MapsComponent implements OnInit, AfterViewInit {
     html2canvas(document.querySelector('#capture')).then(canvas => {
       // tslint:disable-next-line: max-line-length
       const imgData = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');  // here is the most important part because if you dont replace you will get a DOM 18 exception.
-      window.location.href= imgData; // it will save locally
+      window.location.href = imgData; // it will save locally
       console.log(imgData);
       document.body.appendChild(canvas);
-  });
+    });
   }
   zoomIn() {
     if (this.zoom < this.options.maxZoom) { this.zoom++; }

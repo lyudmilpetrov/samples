@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ChangeDetectionStrategy, OnInit, ViewChild, ElementRef, Renderer2, NgZone, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, ViewChild, ElementRef, Renderer2, NgZone, Input, Output, EventEmitter, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -7,8 +7,11 @@ import { OverlayMessageComponent } from '@app/components/overlay-message/overlay
 import { LoginFormComponent } from '@app/components/login-form/login-form.component';
 import * as faceapi from 'face-api.js';
 import { OfflineService } from '../services/services';
-import { ToastrService } from '@app/services/toastr.service';
 import { restrictedWords } from '@app/services/restrictedWordsValidators';
+// import { ToastrService } from '@app/services/toastr.service';
+import { TOASTR_TOKEN, Toastr } from '@app/services/toastr.service';
+import { inject } from '@angular/core/testing';
+
 // import { WebWorker } from './web_worker';
 // https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API
 // https://school.geekwall.in/p/Hy29kFEGm/face-recognition-in-the-browser-with-tensorflow-js-javascript
@@ -86,7 +89,8 @@ export class FaceLoginComponent implements OnInit {
   panelOpenState = false;
   currentUserName = '';
   constructor(
-    private toastr: ToastrService,
+    @Inject(TOASTR_TOKEN) private toastr: Toastr,
+    // private toastr: ToastrService,
     private renderer: Renderer2,
     private os: OfflineService,
     private dialog: MatDialog,
@@ -176,7 +180,8 @@ export class FaceLoginComponent implements OnInit {
   }
   ngOnInit() {
     // this.toastr.setTopCentered();
-    // this.toastr.success('open now', 'title');
+    this.toastr.options.positionClass = 'toast-top-center';
+    this.toastr.success('open now', 'title');
     console.log(faceapi);
     this.breakpoint = (window.innerWidth <= 400) ? 1 : 2;
     // this.openDialog();
@@ -192,7 +197,7 @@ export class FaceLoginComponent implements OnInit {
     console.log(formvalues);
     if (this.profileForm.valid) {
       if (formvalues.username.replace(/ +/g, ' ').length >= 1 && formvalues.password.replace(/ +/g, ' ').length) {
-        let obj = {
+        const obj = {
           username: formvalues.username,
           password: formvalues.password
         };

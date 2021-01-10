@@ -9,7 +9,7 @@
         "lint": "ng lint",
         "e2e": "ng e2e",
         "deploy": "gatsby build --prefix-paths && gh-pages -d public",
-        "start-pwa": "ng build --prod && http-server -p 4222 -c-1 dist/speech-recognition"
+        "start-pwa": "ng build --prod=true --aot=true --output-hashing none && http-server -p 4222 -c-1 'C:\\Users\\ljudm\\source\\repos\\samples\\wwwroot\\' "
     },
     "private": true,
     "dependencies": {

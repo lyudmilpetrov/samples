@@ -3,6 +3,7 @@ import { Router, RouterEvent } from '@angular/router';
 import { TasksService } from '@app/signalr-core/tasks.service';
 import { Subscription } from 'rxjs';
 import * as faceapi from 'face-api.js';
+import { GlobalStaticVariables } from './shared/globals';
 export let broweserRefresh = false;
 @Component({
   selector: 'app-root',
@@ -14,7 +15,20 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'speech-recognition';
   refreshSubscription: Subscription;
   routerSubscription: Subscription;
-  constructor(router: Router) {
+  signalrpoint = 'https://localhost:44382/';
+  constructor(
+    private router: Router,
+    private ts: TasksService,
+    private gsv: GlobalStaticVariables
+  ) {
+    switch (window.location.origin) {
+      case 'http://localhost:4200':
+        this.gsv.set('api', 'signalrapi', 'https://localhost:44382/');
+        break;
+      default:
+        this.gsv.set('api', 'signalrapi', window.location.origin);
+        break;
+    }
     this.routerSubscription = router.events.subscribe((event: RouterEvent) => {
       this.navigationInterceptor();
     });
@@ -22,7 +36,8 @@ export class AppComponent implements OnInit, OnDestroy {
   navigationInterceptor(): void {
     this.counter += 1;
     if (this.counter >= 1) {
-      // this.ts.initilizeSignalR(signalrpoint, 'tasks');
+      console.log(this.signalrpoint);
+      this.ts.initilizeSignalR(this.signalrpoint, 'tasks');
     }
   }
   ngOnInit() {

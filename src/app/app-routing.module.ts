@@ -12,6 +12,7 @@ export const routes: Routes = [
   { path: 'web-gl', loadChildren: () => import('./web-gl/web-gl.module').then(m => m.WebGLModule) },
   { path: 'face-mesh', loadChildren: () => import('./face-mesh/face-mesh.module').then(m => m.FaceMeshModule) },
   { path: 'maps', loadChildren: () => import('./maps/maps.module').then(m => m.MapsModule) },
+  { path: 'landing-video', loadChildren: () => import('./landing-video/landing-video.module').then(m => m.LandingVideoModule) },
   { path: '**', redirectTo: 'chart-js', pathMatch: 'full' }
 ];
 

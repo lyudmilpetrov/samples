@@ -1,6 +1,6 @@
-import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, ɵConsole, ChangeDetectorRef, Input, ViewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, ɵConsole, ChangeDetectorRef, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { Directive, ElementRef } from '@angular/core';
-import { DataServices, SearchServices, GenericServices, OfflineService } from '../services/services';
+import { ApiServices, DataServices, GenericServices, OfflineService } from '../services/services';
 import { Subject, interval, Subscription, BehaviorSubject } from 'rxjs';
 import { filter, map, pairwise } from 'rxjs/operators';
 import { BarChart, ChartInfo, IDataSample1, IJSONReports, JSONFile, LineChart, SliderInfo } from './data-models/data-models';
@@ -11,8 +11,8 @@ import { GeneralChartServices, ObservableAsService } from './services/data-servi
   templateUrl: './chart-js.html',
   styleUrls: ['./chart-js.css']
 })
-export class ChartJSComponent implements OnInit, OnDestroy {
-  @ViewChild('myIdentifier') myIdentifier: ElementRef;
+export class ChartJSComponent implements OnInit, OnDestroy, AfterViewInit {
+  // @ViewChild('myIdentifier') myIdentifier: ElementRef;
   breakpoint: number;
   showdata = false;
   forSlider_Min: number;
@@ -73,6 +73,12 @@ export class ChartJSComponent implements OnInit, OnDestroy {
   }
   onResize(event) {
     this.breakpoint = (event.target.innerWidth <= 4) ? 1 : 2;
+  }
+  ngAfterViewInit() {
+    // console.log(this.myIdentifier);
+
+    // console.log('height---' + this.myIdentifier.offsetHeight);  //<<<===here
+    // console.log('width---' + this.myIdentifier.nativeElement.offsetWidth);    //<<<===here
   }
   ngOnDestroy() {
     if (this.Line_Sample1_Subscription) {

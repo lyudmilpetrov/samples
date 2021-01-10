@@ -161,7 +161,42 @@ PWA
 2) npm install http-server -g
 3) add "start-pwa": "ng build --prod && http-server -p 8080 -c-1 dist/speech-recognition" to package.json
 4) npm run start-pwa
+
+add "src/manifest.webmanifest" under assets in angular.json
+
 https://blog.angular-university.io/angular-service-worker/
 https://web.dev/creating-pwa-with-angular-cli/
 
+add manually to index.html
+
+<link rel="manifest" href="/manifest.webmanifest">
+
+"outputPath": "C:\\Users\\ljudm\\source\\repos\\samples\\wwwroot\\",
+
+
+Now in Javascript you have two options:
+Set href attribute using a URL:
+document.querySelector('#my-manifest-placeholder').setAttribute('href', '/my-dynamic-manifest-url.json');
+
+2. Use a JSON object to set your manifest
+var myDynamicManifest = {
+  "name": "Your Great Site",
+  "short_name": "Site",
+  "description": "Something dynamic",
+  "start_url": "<your-url>",
+  "background_color": "#000000",
+  "theme_color": "#0f4a73",
+  "icons": [{
+    "src": "whatever.png",
+    "sizes": "256x256",
+    "type": "image/png"
+  }]
+}
+const stringManifest = JSON.stringify(myDynamicManifest);
+const blob = new Blob([stringManifest], {type: 'application/json'});
+const manifestURL = URL.createObjectURL(blob);
+document.querySelector('#my-manifest-placeholder').setAttribute('href', manifestURL);
+
+Both ways work.
+By this, you can allow your app users to customize the icon, colors, and even the very name of your app without any server involvement.
 

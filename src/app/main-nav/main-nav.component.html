@@ -8,12 +8,18 @@
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
-        <mat-toolbar color="primary">
+        <mat-toolbar #top *ngIf="!hidetop" color="primary">
             <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-            <span>Samples - {{LabelStr}}</span>
+            <span>Sample {{LabelStr}}</span>
+            <mat-icon *ngIf="!hidetop2" style="display: flex; margin-left: auto; cursor: pointer;" (click)="expand()">fullscreen</mat-icon>
+            <mat-icon *ngIf="hidetop2" style="display: flex; margin-left: auto; cursor: pointer;" (click)="shrink()">fullscreen_exit</mat-icon>
         </mat-toolbar>
-        <router-outlet></router-outlet>
+        <mat-icon *ngIf="hidetop" style="display: flex; margin-left: auto; cursor: pointer;" (click)="shrink()">fullscreen_exit</mat-icon>
+        <router-outlet>
+        </router-outlet>
     </mat-sidenav-content>
 </mat-sidenav-container>
+<app-progress-info [sentToSignalRChannel]="sentToSignalRChannel" (outputmessageEvent)="receiveFromSignalR($event)">
+</app-progress-info>

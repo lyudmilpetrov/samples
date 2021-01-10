@@ -1,16 +1,20 @@
-import { Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { MatCard } from '@angular/material/card';
+import { ApiServices } from '@app/services/services';
+import { GlobalStaticVariables } from '@app/shared/globals';
 
 @Component({
   selector: 'app-dashboards-card',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.css']
 })
-export class CardComponent implements OnInit, OnChanges {
+export class CardComponent implements OnInit, OnChanges, AfterViewInit {
+  @ViewChild('cardEl') card: MatCard;
   @Input() title: string;
   titlestr: string[] = [];
-  constructor() { }
+  constructor(private api: ApiServices, private gsv: GlobalStaticVariables) { }
   ngOnChanges() {
     this.titlestr = this.title.split(',');
     // // console.log(this.titlestr);
@@ -40,6 +44,22 @@ export class CardComponent implements OnInit, OnChanges {
       doc.addImage(contentDataURL, 'PNG', 0, position, width, height);
       doc.save(this.titlestr[0] + '.pdf'); // Generated PDF
     });
+  }
+  getExcel() {
+    // this.gsv.set('api', 'signalrapi', 'https://localhost:44382/');
+    console.log(this.gsv.get('api', 'signalrapi'));
+    this.api.getExcel(this.gsv.get('api', 'signalrapi')).subscribe(x => {
+     console.log(x);
+      // window.open(x);
+      // // Fetch the original image
+      // fetch('./1.xlsx')
+      //   // Retrieve its body as ReadableStream
+      //   .then(response => response.body);
+
+    });
+  }
+  ngAfterViewInit() {
+    console.log(this.card._animationMode);
   }
 
 }

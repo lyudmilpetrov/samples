@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ChangeDetectionStrategy, OnInit, ViewChild, ElementRef, Renderer2, NgZone } from '@angular/core';
+import { MatCard } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileUploadComponent } from '@app/components/file-upload/file-upload.component';
@@ -33,6 +34,7 @@ export interface LabeledFaceDescriptors {
 })
 export class FaceRecognitionComponent implements OnInit {
   @ViewChild('video', { static: true }) videoElement: ElementRef;
+  @ViewChild('c1', { static: true }) c1: MatCard;
   @ViewChild('canvasLast', { static: true }) canvasLast: ElementRef<HTMLCanvasElement>;
   @ViewChild('canvasPrior', { static: true }) canvasPrior: ElementRef<HTMLCanvasElement>;
   @ViewChild('second') secondUpload: FileUploadComponent;
@@ -73,6 +75,10 @@ export class FaceRecognitionComponent implements OnInit {
   breakpoint: number;
   switchimage = 1;
   showUpload = false;
+  text = 'Allow the browser to use your camera and click on video to capture image or press buttons below, or either click on image holders on the left/below. The demo uses only browsers computing power, now backend server';
+  mobileHide = false;
+  screenWidth: any;
+  screenHeight: any;
   constructor(
     private renderer: Renderer2,
     private os: OfflineService,
@@ -80,12 +86,16 @@ export class FaceRecognitionComponent implements OnInit {
     private snackBar: MatSnackBar,
     private httpClient: HttpClient,
     private ngZone: NgZone) {
-      if (window.location.hostname === 'localhost') {
-        this.showUpload = true;
-      } else {
-        this.showUpload = false;
-      }
-
+    if (window.location.hostname === 'localhost') {
+      this.showUpload = true;
+    } else {
+      this.showUpload = false;
+    }
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      this.constraints.video.facingMode = 'user';
+      this.text = 'Allow the browser to use your camera and tap on the video to capture image. The demo uses only browsers computing power, now backend server';
+      this.mobileHide = true;
+    }
     // const data = require('src/file.json');
     // console.log("Json data : ", JSON.stringify(data));
     // console.log('! 1 ');
@@ -175,6 +185,9 @@ export class FaceRecognitionComponent implements OnInit {
   }
   onResize(event) {
     this.breakpoint = (event.target.innerWidth <= 4) ? 1 : 2;
+    this.screenWidth = window.innerWidth;
+
+    this.screenHeight = window.innerHeight;
   }
   async loadF(url: string, call: string) {
     await faceapi[call](url);
@@ -188,6 +201,7 @@ export class FaceRecognitionComponent implements OnInit {
       this.videoHeight = this.videoElement.nativeElement.videoHeight;
       this.videoWidth = this.videoElement.nativeElement.videoWidth;
     });
+    console.log(this.videoHeight);
   }
   startCamera() {
     if (!!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
@@ -293,30 +307,38 @@ export class FaceRecognitionComponent implements OnInit {
     //     });
     // }
     // For single face
-    let fullFaceDescriptionLast = await faceapi.detectSingleFace(canvaslast).withFaceLandmarks().withFaceDescriptor();
-    fullFaceDescriptionLast = faceapi.resizeResults(fullFaceDescriptionLast, d);
-    let fullFaceDescriptionPrior = await faceapi.detectSingleFace(canvasprior).withFaceLandmarks().withFaceDescriptor();
-    fullFaceDescriptionPrior = faceapi.resizeResults(fullFaceDescriptionPrior, d);
-    if (typeof fullFaceDescriptionLast !== 'undefined') {
-      faceapi.draw.drawDetections(canvaslast, fullFaceDescriptionLast);
-      faceapi.draw.drawFaceLandmarks(canvaslast, fullFaceDescriptionLast);
+    try {
+      let fullFaceDescriptionLast = await faceapi.detectSingleFace(canvaslast).withFaceLandmarks().withFaceDescriptor();
+      fullFaceDescriptionLast = faceapi.resizeResults(fullFaceDescriptionLast, d);
+      let fullFaceDescriptionPrior = await faceapi.detectSingleFace(canvasprior).withFaceLandmarks().withFaceDescriptor();
+      fullFaceDescriptionPrior = faceapi.resizeResults(fullFaceDescriptionPrior, d);
+      if (typeof fullFaceDescriptionLast !== 'undefined') {
+        faceapi.draw.drawDetections(canvaslast, fullFaceDescriptionLast);
+        faceapi.draw.drawFaceLandmarks(canvaslast, fullFaceDescriptionLast);
+      }
+      if (typeof fullFaceDescriptionPrior !== 'undefined') {
+        faceapi.draw.drawDetections(canvasprior, fullFaceDescriptionPrior);
+        faceapi.draw.drawFaceLandmarks(canvasprior, fullFaceDescriptionPrior);
+      }
+      const faceDescriptorLast = [fullFaceDescriptionLast.descriptor];
+      console.log(faceDescriptorLast);
+      const faceDescriptorPrior = [fullFaceDescriptionPrior.descriptor];
+      console.log(faceDescriptorPrior);
+      // // // const labeledFaceDescriptors = new faceapi.LabeledFaceDescriptors(name, faceDescriptor);
+      const labeledFaceDescriptorsPrior = new faceapi.LabeledFaceDescriptors('Prior', faceDescriptorPrior);
+      // 0.6 is a good distance threshold value to judge
+      // whether the descriptors match or not
+      const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptorsPrior, this.maxDescriptorDistance);
+      const results = [fullFaceDescriptionLast].map(fd => faceMatcher.findBestMatch(fd.descriptor));
+      // tslint:disable-next-line: no-string-literal
+      r1 = results[0]['_distance'];
+    } catch (e) {
+      console.log(e);
     }
-    if (typeof fullFaceDescriptionPrior !== 'undefined') {
-      faceapi.draw.drawDetections(canvasprior, fullFaceDescriptionPrior);
-      faceapi.draw.drawFaceLandmarks(canvasprior, fullFaceDescriptionPrior);
+    finally {
+      // return r1;
+      console.log('done');
     }
-    const faceDescriptorLast = [fullFaceDescriptionLast.descriptor];
-    console.log(faceDescriptorLast);
-    const faceDescriptorPrior = [fullFaceDescriptionPrior.descriptor];
-    console.log(faceDescriptorPrior);
-    // // // const labeledFaceDescriptors = new faceapi.LabeledFaceDescriptors(name, faceDescriptor);
-    const labeledFaceDescriptorsPrior = new faceapi.LabeledFaceDescriptors('Prior', faceDescriptorPrior);
-    // 0.6 is a good distance threshold value to judge
-    // whether the descriptors match or not
-    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptorsPrior, this.maxDescriptorDistance);
-    const results = [fullFaceDescriptionLast].map(fd => faceMatcher.findBestMatch(fd.descriptor));
-    // tslint:disable-next-line: no-string-literal
-    r1 = results[0]['_distance'];
     return r1;
   }
   openDialog(messageStr: string) {
@@ -419,6 +441,6 @@ export class FaceRecognitionComponent implements OnInit {
     context.restore();
   }
   ngAfterViewInit() {
-    console.log(this.secondUpload);
+    console.log(this.c1);
   }
 }

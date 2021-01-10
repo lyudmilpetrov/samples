@@ -24,7 +24,8 @@
                             "src/assets",
                             "src/assets/json",
                             "src/assets/weights",
-                            "src/app/face-recognition/models"
+                            "src/app/face-recognition/models",
+                            "src/manifest.webmanifest"
                         ],
                         "styles": [
                             "./node_modules/toastr/build/toastr.min.css",
@@ -62,7 +63,9 @@
                                     "maximumWarning": "6kb",
                                     "maximumError": "10kb"
                                 }
-                            ]
+                            ],
+                            "serviceWorker": true,
+                            "ngswConfigPath": "ngsw-config.json"
                         }
                     }
                 },

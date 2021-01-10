@@ -16,13 +16,14 @@ import { BarChartComponent } from './chart-js/components/bar-chart/bar-chart.com
 import { SliderComponent } from './chart-js/components/slider/slider.component';
 import { RadarChartComponent } from './chart-js/components/radar-chart/radar-chart.component';
 import { Globals } from './shared/globals';
-import { OfflineService } from './services/services';
+import { ApiServices, OfflineService } from './services/services';
 import { OverlayModule } from '@angular/cdk/overlay';
 // import { ToastrService } from '@app/services/toastr.service';
 import { Toastr, TOASTR_TOKEN } from '@app/services/toastr.service';
 import * as toastr from 'toastr';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { ProgressInfoModule } from '@app/components/progress-info/progress-info.module';
 // const toastr = window['toastr'];
 
 @NgModule({
@@ -36,12 +37,12 @@ import { environment } from '../environments/environment';
     CommonModule,
     HttpClientModule,
     OverlayModule,
+    ProgressInfoModule,
     HttpClientXsrfModule.withOptions({
       cookieName: 'Building-App-Xsrf-Cookie',
       headerName: 'Building-App-Xsrf-Header'
-    })
-    // ,
-    // ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    }),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   declarations: [
     AppComponent,
@@ -53,7 +54,7 @@ import { environment } from '../environments/environment';
     RadarChartComponent,
     SliderComponent
   ],
-  providers: [Globals, TasksService, OfflineService,
+  providers: [Globals, TasksService, OfflineService, ApiServices,
     //  ToastrService
     { provide: TOASTR_TOKEN, useValue: toastr }
   ],

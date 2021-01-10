@@ -6,22 +6,28 @@
     <mat-grid-list [cols]="breakpoint" rowHeight="250px" (window:resize)="onResize($event)">
         <!--Table-->
         <mat-grid-tile [colspan]="1" [rowspan]="3">
-            <app-dashboards-card #myIdentifier title="{{titleForCard0}}">
-                <mat-spinner style="margin:0 auto;" mode="indeterminate" *ngIf="!showdata"></mat-spinner>
-                <app-dashboards-line-chart [PassedInfo]="d1CI" *ngIf="showdata"></app-dashboards-line-chart>
+            <app-dashboards-card title="{{titleForCard0}}">
+                <div added-element>
+                    <mat-spinner style="margin:0 auto;" mode="indeterminate" *ngIf="!showdata"></mat-spinner>
+                    <app-dashboards-line-chart [PassedInfo]="d1CI" *ngIf="showdata"></app-dashboards-line-chart>
+                </div>
             </app-dashboards-card>
         </mat-grid-tile>
         <!--Charts-->
         <mat-grid-tile [colspan]="1" [rowspan]="2">
             <app-dashboards-card title="{{titleForCard1}}">
-                <mat-spinner style="margin:0 auto;" mode="indeterminate" *ngIf="!showdata"></mat-spinner>
-                <app-dashboards-bar-chart [PassedInfo]="d2CI" *ngIf="showdata"></app-dashboards-bar-chart>
+                <div added-element>
+                    <mat-spinner style="margin:0 auto;" mode="indeterminate" *ngIf="!showdata"></mat-spinner>
+                    <app-dashboards-bar-chart [PassedInfo]="d2CI" *ngIf="showdata"></app-dashboards-bar-chart>
+                </div>
             </app-dashboards-card>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="1" [rowspan]="2">
             <app-dashboards-card title="{{titleForCard2}}">
-                <mat-spinner style="margin:0 auto;" mode="indeterminate" *ngIf="!showdata"></mat-spinner>
-                <app-dashboards-bar-chart [PassedInfo]="d3CI" *ngIf="showdata"></app-dashboards-bar-chart>
+                <div added-element>
+                    <mat-spinner style="margin:0 auto;" mode="indeterminate" *ngIf="!showdata"></mat-spinner>
+                    <app-dashboards-bar-chart [PassedInfo]="d3CI" *ngIf="showdata"></app-dashboards-bar-chart>
+                </div>
             </app-dashboards-card>
         </mat-grid-tile>
     </mat-grid-list>

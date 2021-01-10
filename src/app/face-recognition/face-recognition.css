@@ -8,6 +8,12 @@
     min-height: 100%; */
 }
 
+.p-1 {
+    /* height: 70vh;
+    min-height: 70vh;
+    max-height: fit-content; */
+}
+
 .mat-chip {
     justify-content: space-between;
 }

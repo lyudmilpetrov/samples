@@ -3,7 +3,7 @@ https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/get-sta
 https://github.com/Janghyun1230/Speaker_Verification
 
 
-
+s
 https://github.com/MohamadMerchant/Voice-Authentication-and-Face-Recognition
 
 ng serve --prod=true --watch=true

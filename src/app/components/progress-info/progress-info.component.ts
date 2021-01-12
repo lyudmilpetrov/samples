@@ -40,7 +40,7 @@ export class ProgressInfoComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
   ngOnChanges() {
-    // // // // // console.log('Progress info ngOnChanges - ' + this.sentToSignalRChannel);
+    // // // // // // console.log('Progress info ngOnChanges - ' + this.sentToSignalRChannel);
     if (this.sentToSignalRChannel.length > 0) {
       this.channel = this.sentToSignalRChannel;
     }
@@ -52,7 +52,7 @@ export class ProgressInfoComponent implements OnInit, OnDestroy, OnChanges {
     if (this.connectionState === 2) {
       this.channelService.sub(channel).subscribe(
         (x: ChannelEvent) => {
-          // // // // // // console.log('Subscribed');
+          // // // // // // // console.log('Subscribed');
           console.table(x);
           this.sentFromServer = x;
           this.outputmessageEvent.emit(this.sentFromServer);

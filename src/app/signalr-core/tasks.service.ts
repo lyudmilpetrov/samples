@@ -93,7 +93,7 @@ export class TasksService implements OnDestroy {
         .build();
       // // this.hubConnection);
       // define handlers for the connection state events
-      // console.log(this.hubConnection);
+      // // console.log(this.hubConnection);
       let priorEV = '';
       this.hubConnection.onreconnecting((error) => {
         // // error);
@@ -139,7 +139,7 @@ export class TasksService implements OnDestroy {
 
       });
       this.hubConnection.on('Subscribed', (ev: ChannelEvent) => {
-        console.log(ev);
+        // console.log(ev);
       });
       // this.start('machine', 'encrkye');
       this.startConnection();
@@ -152,7 +152,7 @@ export class TasksService implements OnDestroy {
         this.hubConnection.invoke('RegisterUser', machine, encrkey);
         this.connectionState$ = of(ConnectionState.Connected);
       }).catch((error) => {
-        // console.log(error);
+        // // console.log(error);
         this.error$ = of(error);
       });
   }
@@ -198,7 +198,7 @@ export class TasksService implements OnDestroy {
         this.ConnectionEstablished.emit(true);
         // this.connectionState$ = of(ConnectionState.Connected);
         this.connectionStateInit.next(ConnectionState.Connected);
-        console.log(this.getConnetionState());
+        // console.log(this.getConnetionState());
       })
       .catch(err => {
         setTimeout(() => {

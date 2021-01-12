@@ -43,7 +43,7 @@ export class MainNavComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef) {
-    console.log(window.location.hostname);
+    // console.log(window.location.hostname);
     router.events.pipe(
       withLatestFrom(this.isHandset$),
       filter(([a, b]) => b && a instanceof NavigationEnd)
@@ -63,7 +63,7 @@ export class MainNavComponent implements OnInit, AfterViewInit {
     this.hidetop2 = false;
   }
   ngOnInit() {
-    // // // // console.log('called');
+    // // // // // console.log('called');
   }
   expand() {
     this.drawer.close();
@@ -81,13 +81,13 @@ export class MainNavComponent implements OnInit, AfterViewInit {
     this.hidetop2 = false;
   }
   receiveFromSignalR($event: ChannelEvent) {
-    // // // // // // // console.log($event);
+    // // // // // // // // console.log($event);
     if (typeof $event.Data.State !== 'undefined') {
       this.items.push($event);
       this.message = $event;
       this.cdr.detectChanges();
       if ($event.Data.State.includes('Download')) {
-        // // // // // // // console.log('download here');
+        // // // // // // // // console.log('download here');
       }
     }
   }

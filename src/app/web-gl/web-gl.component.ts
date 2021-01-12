@@ -17,7 +17,7 @@ export class WebGLComponent implements OnInit, AfterViewInit {
     breakpoint: number;
 
     constructor() {
-        console.log('loaded');
+        // console.log('loaded');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
@@ -27,7 +27,7 @@ export class WebGLComponent implements OnInit, AfterViewInit {
         document.body.appendChild(renderer.domElement);
         // this.context1 = this.barchartCanvas.nativeElement.getContext('2d');
         // this.barchartCanvas.nativeElement.appendChild(renderer.domElement);
-        // console.log(document.body);
+        // // console.log(document.body);
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
         const cube = new THREE.Mesh(geometry, material);
@@ -51,7 +51,7 @@ export class WebGLComponent implements OnInit, AfterViewInit {
     ngOnInit() {
     }
     ngAfterViewInit(): void {
-        console.log('loaded');
+        // console.log('loaded');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
@@ -63,7 +63,7 @@ export class WebGLComponent implements OnInit, AfterViewInit {
         container.appendChild(renderer.domElement);
         // this.context1 = this.barchartCanvas.nativeElement.getContext('2d');
         // this.barchartCanvas.nativeElement.appendChild(renderer.domElement);
-        console.log(renderer.domElement);
+        // console.log(renderer.domElement);
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
         const cube = new THREE.Mesh(geometry, material);

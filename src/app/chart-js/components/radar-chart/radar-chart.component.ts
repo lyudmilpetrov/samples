@@ -34,7 +34,7 @@ export class RadarChartComponent implements OnInit, AfterViewInit, OnChanges, On
         const VisualRadarSub = 'Observable' + this.PassedInfo.observable;
         this.Radar_Chart_Data_Subscription = this.OAS[VisualRadarSub].subscribe((x: RadarChart) => {
             if (Object.keys(x).length !== 0) {
-                // // // // // // console.log(this.RadarchartCanvas);
+                // // // // // // // console.log(this.RadarchartCanvas);
                 this.Radar_Chart_Data = x;
                 const options = {
                     type: this.PassedInfo.type.toLowerCase(),
@@ -113,6 +113,6 @@ export class RadarChartComponent implements OnInit, AfterViewInit, OnChanges, On
         });
     }
     ngOnChanges(changes: SimpleChanges) {
-        // // console.log(this.PassedInfo);
+        // // // console.log(this.PassedInfo);
      }
 }

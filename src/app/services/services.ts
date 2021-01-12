@@ -2,7 +2,7 @@
 import { throwError as observableThrowError, Observable, from, BehaviorSubject, Subject, Subscription, AsyncSubject, Observer } from 'rxjs';
 import { Injectable, Optional, SkipSelf } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { UserInfo } from '../shared/globals';
 import { map, filter, scan, catchError, mergeMap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
@@ -122,7 +122,7 @@ export class DataServices {
   };
   private userInit = new BehaviorSubject<UserInfo>(this.user);
   currentUser = this.userInit.asObservable();
-  constructor(@Optional() @SkipSelf() parentModule: DataServices, private os: OfflineService
+  constructor(@Optional() @SkipSelf() parentModule: DataServices, private os: OfflineService, private http: HttpClient
   ) {
     // if (parentModule) {
     //     throw new Error(
@@ -139,77 +139,6 @@ export class DataServices {
   }
   getCurrentUser() {
     return this.user;
-  }
-  downloadFilesObservable = (fullpaths: string[], env: string, filesExtensions: string[]): Observable<any> => {
-    return new Observable((observer: any) => {
-      observer.next(
-        ((f, e) => {
-          function download_next(i) {
-            if (i >= f.length) {
-              return 'done';
-            } else {
-              const filename = f[i].slice(f[i].lastIndexOf('\\') + 1);
-              const fileExtension = filename.slice(filename.lastIndexOf('.') + 1);
-              const filenamefullpath = e + filename;
-              if (filesExtensions.includes(fileExtension)) {
-                const a = document.createElement('a');
-                a.href = filenamefullpath;
-                a.target = '_parent';
-                // Use a.download if available, it prevents plugins from opening.
-                if ('download' in a) {
-                  a.download = filename;
-                }
-                // Add a to the doc for click to work.
-                (document.body || document.documentElement).appendChild(a);
-                if (a.click) {
-                  a.click(); // The click method is supported by most browsers.
-                }
-                // Delete the temporary link.
-                a.parentNode.removeChild(a);
-                // Download the next file with a small timeout. The timeout is necessary
-                // for IE, which will otherwise only download the first file.
-                setTimeout(() => {
-                  download_next(i + 1);
-                  // return a;
-                }, 1500);
-              }
-            }
-          }
-          // Initiate the first download.
-          download_next(0);
-        })(fullpaths, env)
-      );
-    });
-  }
-  download_files(files, env) {
-    function download_next(i) {
-      if (i >= files.length) {
-        return;
-      }
-      const a = document.createElement('a');
-      const filename = files[i].slice(files[i].lastIndexOf('\\') + 1);
-      const filenamefullpath: string = env + filename;
-      a.href = filenamefullpath;
-      a.target = '_parent';
-      // Use a.download if available, it prevents plugins from opening.
-      if ('download' in a) {
-        a.download = filename;
-      }
-      // Add a to the doc for click to work.
-      (document.body || document.documentElement).appendChild(a);
-      if (a.click) {
-        a.click(); // The click method is supported by most browsers.
-      }
-      // Delete the temporary link.
-      a.parentNode.removeChild(a);
-      // Download the next file with a small timeout. The timeout is necessary
-      // for IE, which will otherwise only download the first file.
-      setTimeout(() => {
-        download_next(i + 1);
-      }, 500);
-    }
-    // Initiate the first download.
-    download_next(0);
   }
   getDateFromString(date: string): Date {
     return new Date(+date.slice(6, 10), +date.slice(0, 2) - 1, +date.slice(3, 5));
@@ -231,7 +160,7 @@ export class DataServices {
 }
 @Injectable({ providedIn: 'root' })
 export class GenericServices {
-  constructor(@Optional() @SkipSelf() parentModule: DataServices, private os: OfflineService
+  constructor(@Optional() @SkipSelf() parentModule: DataServices, private os: OfflineService, private http: HttpClient,
   ) {
     // if (parentModule) {
     //     throw new Error(
@@ -261,7 +190,7 @@ export class GenericServices {
   //     }
   // }
   onBeforeUnload(win: string) {
-    // // // // // // console.log(location);
+    // // // // // // // console.log(location);
     window.onbeforeunload = () => {
       const xcount: any = this.os.getCache('sessionStorage', win, 'object');
       xcount['entry'] = +xcount['entry'] + 1;
@@ -384,8 +313,8 @@ export class GenericServices {
     // if (dp === 2 && +(+num.toFixed(3)).toString().slice(-1) === 5) {
     //     return +(+num + 0.01).toFixed(dp);
     // } else {
-    // // // // // // // // console.log(num);
-    // // // // // // // // console.log(dp);
+    // // // // // // // // // console.log(num);
+    // // // // // // // // // console.log(dp);
     return +num.toFixed(dp);
     // }
     // if (arguments.length !== 2) { throw new Error('2 arguments required'); }
@@ -517,7 +446,7 @@ export class GenericServices {
     const r: string[] = [];
     r[0] = x.join(' ');
     r[1] = t;
-    // // // // // // // // // // // // // // // // // // // // // console.log(r);
+    // // // // // // // // // // // // // // // // // // // // // // console.log(r);
     return r;
   }
   replaceObjectWithinArray(arr: object[], _old: object, _new: object): object[] {
@@ -570,8 +499,8 @@ export class GenericServices {
   }
   checkIfElementInArray(elem: any, arr: any[]): boolean {
     let r = false;
-    // // // // // // // // // // console.log(elem);
-    // // // // // // // // // // console.log(arr);
+    // // // // // // // // // // // console.log(elem);
+    // // // // // // // // // // // console.log(arr);
     arr.map(e => {
       if (JSON.stringify(elem) === JSON.stringify(e)) {
         r = true;
@@ -592,7 +521,7 @@ export class GenericServices {
         + (decimalCount ? decimal + Math.abs(amount -
           Number(i)).toFixed(decimalCount).slice(2) : '');
     } catch (e) {
-      // // // // // // // // // console.log(e);
+      // // // // // // // // // // console.log(e);
     }
   }
   checkIfOKToRunFromButton(caller: string, buttonnumber: number, modeoption: string): boolean {
@@ -649,46 +578,64 @@ export class GenericServices {
       )());
     });
   }
-  // downloadFilesObservable = (fullpaths: string[], env: string, filesExtensions: string[]): OEervable<any> => {
-  //   return new Observable((observer: any) => {
-  //     observer.next((
-  //       (f, e) => {
-  //         function download_next(i: number) {
-  //           if (i >= f.length) {
-  //             return 'done';
-  //           } else {
-  //             const filename = f[i].slice(f[i].lastIndexOf('\\') + 1);
-  //             const file_extension = filename.slice(filename.lastIndexOf('.') + 1);
-  //             const filenamefullpath = e + filename;
-  //             if (filesExtensions.includes(fileExtension)) {
-  //               const a = document.createElement('a');
-  //               a.href = filenamefullpath;
-  //               a.target = '_parent';
-  //               // use a.download if available it prevents plugins from opening
-  //               if ('download' in a) {
-  //                 a.download = filename;
-  //               }
-  //               // add a to the doc for click to work
-  //               (document.body || document.documentElement).appendChild(a);
-  //               if (a.click) {
-  //                 // click is supported by most browsers
-  //                 a.click();
-  //               }
-  //               // delete temporary link to work
-  //               a.parentNode.removeChild(a);
-  //               // download the next file with timeout since it is necessary for IE
-  //               setTimeout(() => {
-  //                 download_next(i + 1);
-  //               }, 500);
-  //             }
-  //           }
-  //         }
-  //         // Initiate first download
-  //         download_next(0);
-  //       }
-  //     )(fullpaths, env));
-  //   });
-  // }
+  downloadFilesObservable = (fullpaths: string[], serverurl: string, filesExtensions: string[]): Observable<any> => {
+    return new Observable((observer: any) => {
+      observer.next((
+        (f, e) => {
+          function download_next(i: number) {
+            if (i >= f.length) {
+              return 'done';
+            } else {
+              const filename = f[i].slice(f[i].lastIndexOf('\\') + 1);
+              const fileextension = filename.slice(filename.lastIndexOf('.') + 1);
+              // const filenamefullpath = e + filename;
+              if (filesExtensions.includes(fileextension)) {
+                const headers = new HttpHeaders().set('authorization', 'Bearer 12345');
+                this.http.get(serverurl, { headers, responseType: 'blob' as 'json' }).subscribe(
+                  (response: any) => {
+                    const dataType = response.type;
+                    const binaryData = [];
+                    binaryData.push(response);
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: dataType }));
+                    if (filename) {
+                      downloadLink.setAttribute('download', filename);
+                    }
+                    document.body.appendChild(downloadLink);
+                    downloadLink.dispatchEvent(new MouseEvent('click'));
+                    downloadLink.parentNode.removeChild(downloadLink);
+                  }
+                );
+                setTimeout(() => {
+                  download_next(i + 1);
+                }, 500);
+              }
+            }
+          }
+          // Initiate first download
+          download_next(0);
+        }
+      )(fullpaths, serverurl));
+    });
+  }
+  getAnyFilefromServerURL(serverurl: string, shortfilename: string = null) {
+    const headers = new HttpHeaders().set('authorization', 'Bearer 12345');
+    this.http.get(serverurl, { headers, responseType: 'blob' as 'json' }).subscribe(
+      (response: any) => {
+        const dataType = response.type;
+        const binaryData = [];
+        binaryData.push(response);
+        const downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, { type: dataType }));
+        if (shortfilename) {
+          downloadLink.setAttribute('download', shortfilename);
+        }
+        document.body.appendChild(downloadLink);
+        downloadLink.dispatchEvent(new MouseEvent('click'));
+        downloadLink.parentNode.removeChild(downloadLink);
+      }
+    );
+  }
 }
 @Injectable({ providedIn: 'root' })
 export class PreviousRouteService {
@@ -736,17 +683,23 @@ export class ApiServices {
   //     }
   //     ), catchError((e: any) => Observable.throw(e)));
   // }
-  getExcel(api: string): Observable<string> {
+  getExcel(api: string): Observable<any> {
     const url = api + 'api/services';
-    return this.http.get(url).pipe(map((r: string) => {
-      console.log(r);
+    // console.log(url);
+    return this.http.get(url).pipe(map((r) => {
+      // console.log(r);
       return r;
     }
     ), catchError((e: any) => observableThrowError(e)));
   }
+  getExcel2(api: string): Observable<any> {
+    const url = api + 'api/services';
+    // console.log(url);
+    return this.http.get(url, { responseType: 'blob' });
+  }
   updateUserInfo(api: string, user: UserInfo): Observable<string> {
     const url = api + '?u=u&uu=uu';
-    // console.log(url);
+    // // console.log(url);
     return this.http.post(url, user).pipe(map((r: string) => {
       return r;
     }
@@ -774,8 +727,8 @@ export class ApiServices {
 
 // // Call subscribe() to start listening for updates.
 // const locationsSubscription = locations.subscribe({
-//   next(position) { // // // // // // // // // // // // // // // // // // // // // // // // // // console.log('Current Position: ', position); },
-//   error(msg) { // // // // // // // // // // // // // // // // // // // // // // // // // // console.log('Error Getting Location: ', msg); }
+//   next(position) { // // // // // // // // // // // // // // // // // // // // // // // // // // // console.log('Current Position: ', position); },
+//   error(msg) { // // // // // // // // // // // // // // // // // // // // // // // // // // // console.log('Error Getting Location: ', msg); }
 // });
 
 // // Stop listening for location after 10 seconds

@@ -34,15 +34,15 @@ export class LineChartComponent implements OnInit, AfterViewInit, OnChanges, OnD
         this.Slider_Data_1_Subscription = this.OAS.ObservableSlider_Bar_1.subscribe(x => {
             if (Object.keys(x).length !== 0) {
                 this.Slider_Data_1 = x;
-                // // // // console.log(this.Slider_Data_1);
+                // // // // // console.log(this.Slider_Data_1);
             }
         });
-        // // // // // // // console.log(this.PassedInfo);
+        // // // // // // // // console.log(this.PassedInfo);
         const visualLineNumber = this.PassedInfo.id;
         const VisualLineSub = 'Observable' + this.PassedInfo.observable;
-        // // // // // // // console.log(VisualLineSub);
+        // // // // // // // // console.log(VisualLineSub);
         this.Line_Chart_Data_Subscription = this.OAS[VisualLineSub].subscribe((x: LineChart) => {
-            // // // console.log(x);
+            // // // // console.log(x);
             if (Object.keys(x).length !== 0) {
                 this.Line_Chart_Data = x;
                 const options = {
@@ -114,8 +114,8 @@ export class LineChartComponent implements OnInit, AfterViewInit, OnChanges, OnD
                     item.ticks.minor.fontStyle = 'normal';
                     item.ticks.major.fontStyle = 'normal';
                 };
-                // // // // // console.log(this.chart.options.scales.xAxes);
-                // // // // // console.log(this.chart.options.scales.xAxes);
+                // // // // // // console.log(this.chart.options.scales.xAxes);
+                // // // // // // console.log(this.chart.options.scales.xAxes);
                 this.chart.options.scales.xAxes.forEach((item) => changeItemColor(item));
                 this.chart.options.scales.yAxes.forEach((item) => changeItemColor(item));
                 this.chart.options.title.fontColor = this.colorLetters;
@@ -123,7 +123,7 @@ export class LineChartComponent implements OnInit, AfterViewInit, OnChanges, OnD
                 this.chart.options.legend.fontColor = this.colorLetters;
                 this.chart.options.legend.fontStyle = 'normal';
                 if (typeof this.chart !== 'undefined') { this.chart.update(); }
-                // // console.log(this.chart);
+                // // // console.log(this.chart);
             } else {
                 if (typeof this.chart !== 'undefined') {
                     this.chart.clear();

@@ -58,13 +58,13 @@ export class MapsComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit() {
     this.map = new google.maps.Map(this.gmapElement.nativeElement, this.mapProp);
-    console.log(this.map);
-    console.log(this.gmapElement);
+    // console.log(this.map);
+    // console.log(this.gmapElement);
     html2canvas(document.querySelector('#capture')).then(canvas => {
       // tslint:disable-next-line: max-line-length
       const imgData = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');  // here is the most important part because if you dont replace you will get a DOM 18 exception.
       window.location.href = imgData; // it will save locally
-      console.log(imgData);
+      // console.log(imgData);
       document.body.appendChild(canvas);
     });
   }

@@ -6,6 +6,6 @@ import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 })
 export class LoginUserComponent implements OnInit {
     ngOnInit() {
-        // // // // // // // // // // // // // // // // console.log('In main plan check');
+        // // // // // // // // // // // // // // // // // console.log('In main plan check');
     }
 }

@@ -25,7 +25,7 @@ export class OverlayMessageComponent {
         });
     }
     onConfirmClick(): void {
-        console.log('Close now');
+        // console.log('Close now');
         this.ngZone.run(() => {
             this.dialogRef.close('some info here');
         });

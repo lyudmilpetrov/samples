@@ -31,7 +31,7 @@ export class SliderComponent implements OnInit, OnDestroy {
         }
     }
     formatLabel(value) {
-        // // console.log(value);
+        // // // console.log(value);
         if (value === 1) {
             this.slider._value = 'dddd';
             return this.slider._value;

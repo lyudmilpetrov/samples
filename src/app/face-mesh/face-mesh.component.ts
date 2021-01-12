@@ -37,7 +37,7 @@ export class FaceMeshComponent implements OnInit {
 
     }
     ngOnInit() {
-        console.log(this.faceLandmarksDetection);
+        // console.log(this.faceLandmarksDetection);
         // this.main();
         this.startCamera();
     }
@@ -48,7 +48,7 @@ export class FaceMeshComponent implements OnInit {
         });
     }
     handleError(error) {
-        console.log('Error: ', error);
+        // console.log('Error: ', error);
     }
     startCamera() {
         if (!!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
@@ -68,7 +68,7 @@ export class FaceMeshComponent implements OnInit {
         const predictions = await model.estimateFaces({
             input: document.querySelector('video')
         });
-        console.log(predictions);
+        // console.log(predictions);
         if (predictions.length > 0) {
             /*
             `predictions` is an array of objects describing each detected face, for example:
@@ -109,7 +109,7 @@ export class FaceMeshComponent implements OnInit {
             //     for (let i = 0; i < keypoints.length; i++) {
             //         const [x, y, z] = keypoints[i];
 
-            //         // console.log(`Keypoint ${i}: [${x}, ${y}, ${z}]`);
+            //         // // console.log(`Keypoint ${i}: [${x}, ${y}, ${z}]`);
             //     }
             // }
         }

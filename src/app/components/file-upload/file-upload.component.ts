@@ -57,10 +57,10 @@ export class FileUploadComponent implements OnInit {
             inProgress: false, progress: 0, canRetry: false, canCancel: true
           };
           this.files.push(filenew);
-          console.log(filenew);
+          // console.log(filenew);
           this.complete.emit(filenew);
         };
-        // console.log(file);
+        // // console.log(file);
         // this.files.push({
         //     data: file, state: 'in', result: '',
         //     inProgress: false, progress: 0, canRetry: false, canCancel: true
@@ -84,7 +84,7 @@ export class FileUploadComponent implements OnInit {
   private uploadFile(file: FileUploadModel) {
     const fd = new FormData();
     fd.append(this.param, file.data);
-    console.log(file);
+    // console.log(file);
     const req = new HttpRequest('POST', this.target, fd, {
       reportProgress: true
     });

@@ -84,7 +84,7 @@ export class GlobalStaticVariables {
 export class Globals {
   counterNumberForSignalR = 1;
   incrementQuestionNumber() {
-    // console.log(this.counterNumberForSignalR);
+    // // console.log(this.counterNumberForSignalR);
     return ++this.counterNumberForSignalR;
   }
 }

@@ -36,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
   navigationInterceptor(): void {
     this.counter += 1;
     if (this.counter >= 1) {
-      console.log(this.signalrpoint);
+      // console.log(this.signalrpoint);
       this.ts.initilizeSignalR(this.signalrpoint, 'tasks');
     }
   }

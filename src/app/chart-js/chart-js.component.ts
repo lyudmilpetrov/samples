@@ -33,6 +33,7 @@ export class ChartJSComponent implements OnInit, OnDestroy, AfterViewInit {
   titleForCard1 = '';
   titleForCard2 = '';
   error: any;
+  data: string;
   headers: string[];
   _jsonFile: JSONFile;
   _jsonBaseURL = '../../assets/json/';
@@ -75,10 +76,10 @@ export class ChartJSComponent implements OnInit, OnDestroy, AfterViewInit {
     this.breakpoint = (event.target.innerWidth <= 4) ? 1 : 2;
   }
   ngAfterViewInit() {
-    // console.log(this.myIdentifier);
+    // // // // console.log(this.myIdentifier);
 
-    // console.log('height---' + this.myIdentifier.offsetHeight);  //<<<===here
-    // console.log('width---' + this.myIdentifier.nativeElement.offsetWidth);    //<<<===here
+    // // // // console.log('height---' + this.myIdentifier.offsetHeight);  //<<<===here
+    // // // // console.log('width---' + this.myIdentifier.nativeElement.offsetWidth);    //<<<===here
   }
   ngOnDestroy() {
     if (this.Line_Sample1_Subscription) {
@@ -145,6 +146,9 @@ export class ChartJSComponent implements OnInit, OnDestroy, AfterViewInit {
         'TIMESTR', 'COUNT', 'GraphLineVisible1_t1', x.value,
         x.latestyear, x.latestmonth, x.returnedyear, x.returnedmonth).subscribe(
           res => {
+            // // // console.log(JSON.stringify(res));
+            this.data = JSON.stringify(res);
+            // // console.log(this.data);
             this.showdata = true;
           }
         );

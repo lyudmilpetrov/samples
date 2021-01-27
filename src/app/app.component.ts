@@ -26,9 +26,10 @@ export class AppComponent implements OnInit, OnDestroy {
         this.gsv.set('api', 'signalrapi', 'https://localhost:44382/');
         break;
       default:
-        this.gsv.set('api', 'signalrapi', window.location.origin);
+        this.gsv.set('api', 'signalrapi', window.location.origin + '/');
         break;
     }
+    this.signalrpoint = this.gsv.get('api', 'signalrapi');
     this.routerSubscription = router.events.subscribe((event: RouterEvent) => {
       this.navigationInterceptor();
     });
@@ -36,11 +37,13 @@ export class AppComponent implements OnInit, OnDestroy {
   navigationInterceptor(): void {
     this.counter += 1;
     if (this.counter >= 1) {
-      // console.log(this.signalrpoint);
+      this.signalrpoint = this.gsv.get('api', 'signalrapi');
+      console.log(this.signalrpoint);
       this.ts.initilizeSignalR(this.signalrpoint, 'tasks');
     }
   }
   ngOnInit() {
+    this.signalrpoint = this.gsv.get('api', 'signalrapi');
   }
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks

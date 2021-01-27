@@ -35,6 +35,11 @@ export class ChartJSComponent implements OnInit, OnDestroy, AfterViewInit {
   error: any;
   data: string;
   headers: string[];
+  mobileHide = false;
+  colSpanTop = 1;
+  rowSpanTop = 2.5;
+  colSpanSide = 1;
+  rowSpanSide = 2;
   _jsonFile: JSONFile;
   _jsonBaseURL = '../../assets/json/';
   result = 0;
@@ -57,7 +62,15 @@ export class ChartJSComponent implements OnInit, OnDestroy, AfterViewInit {
     private breakpointObserver: BreakpointObserver,
     private ds: DataServices,
     private os: OfflineService,
-    private OAS: ObservableAsService) {
+    private OAS: ObservableAsService,
+    private gs: GenericServices) {
+    if (this.gs.checkIfMobile()) {
+      this.mobileHide = true;
+      this.rowSpanTop = 1.5;
+      this.rowSpanSide = 1.5;
+      this.colSpanTop = 1;
+      this.colSpanSide = 1;
+    }
 
     this.initilizeAll();
     this.Slider_Data_1_Subscription = this.OAS.ObservableSlider_Bar_1.subscribe(x => {
@@ -70,7 +83,7 @@ export class ChartJSComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
   ngOnInit() {
-    this.breakpoint = (window.innerWidth <= 400) ? 1 : 2;
+    this.breakpoint = (this.mobileHide) ? 1 : 2;
   }
   onResize(event) {
     this.breakpoint = (event.target.innerWidth <= 4) ? 1 : 2;
@@ -153,5 +166,12 @@ export class ChartJSComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         );
     }, 500);
+  }
+  handleGetExcelFromServer(e: any) {
+    console.log(e);
+  }
+  templateVariable(e: any) {
+    console.log(e);
+    e.logData();
   }
 }

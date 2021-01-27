@@ -193,11 +193,11 @@ export class GenericServices {
     // // // // // // // console.log(location);
     window.onbeforeunload = () => {
       const xcount: any = this.os.getCache('sessionStorage', win, 'object');
-      xcount['entry'] = +xcount['entry'] + 1;
+      xcount.entry = +xcount.entry + 1;
       this.os.setCache('sessionStorage', win, xcount, 'object');
     };
     const xcount2: any = this.os.getCache('sessionStorage', win, 'object');
-    if (xcount2['entry'] >= 1) {
+    if (xcount2.entry >= 1) {
       this.os.clearCache('localStorage', 'projects');
       this.os.clearCache('localStorage', 'project');
       this.os.clearCache('sessionStorage', 'pid');
@@ -636,6 +636,13 @@ export class GenericServices {
       }
     );
   }
+  checkIfMobile(): boolean {
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 @Injectable({ providedIn: 'root' })
 export class PreviousRouteService {
@@ -692,10 +699,14 @@ export class ApiServices {
     }
     ), catchError((e: any) => observableThrowError(e)));
   }
-  getExcel2(api: string): Observable<any> {
-    const url = api + 'api/services';
-    // console.log(url);
-    return this.http.get(url, { responseType: 'blob' });
+  getExcel2(api: string, filename: string, data: any[]): Observable<any> {
+    const url = api + 'api/services?filename=filenamehere';
+    // // console.log(url);
+    return this.http.post(url, data).pipe(map((r: string) => {
+      console.log(r);
+      return r;
+    }
+    ), catchError((e: any) => observableThrowError(e)));
   }
   updateUserInfo(api: string, user: UserInfo): Observable<string> {
     const url = api + '?u=u&uu=uu';

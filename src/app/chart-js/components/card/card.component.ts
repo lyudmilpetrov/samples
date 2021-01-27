@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges, ViewChild, EventEmitter } from '@angular/core';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { MatCard } from '@angular/material/card';
@@ -15,16 +15,18 @@ export class CardComponent implements OnInit, OnChanges, AfterViewInit {
   @ViewChild('cardEl') card: MatCard;
   @Input() title: string;
   @Input() data: string;
+  @Output() getExcelFromServer = new EventEmitter();
   data2: any[] = [];
   titlestr: string[];
   constructor(private api: ApiServices, private gsv: GlobalStaticVariables, private ds: DataServices, private gs: GenericServices) { }
   ngOnChanges() {
     this.titlestr = this.title.split(',');
-    // // // console.log(this.data);
+    // console.log(this.data);
+    // console.log(this.title);
     if (typeof (this.data) !== 'undefined') {
       if (this.data.length > 0) {
         this.data2 = JSON.parse(this.data);
-        // // console.log(this.data2);
+        console.log(this.data2);
       }
     }
   }
@@ -56,7 +58,7 @@ export class CardComponent implements OnInit, OnChanges, AfterViewInit {
       doc.save(this.titlestr[0] + '.pdf'); // Generated PDF
     });
   }
-  getExcel(data: any[]) {
+  getExcel() {
     // this.gsv.set('api', 'signalrapi', 'https://localhost:44382/');
     // // // console.log(this.gsv.get('api', 'signalrapi'));
     const filename = 'C:\\Users\\ljudm\\source\\repos\\samples\\Files\\1.txt';
@@ -97,6 +99,43 @@ export class CardComponent implements OnInit, OnChanges, AfterViewInit {
     console.log(this.data2);
     this.exportAsExcelFile(this.data2, excelname, sheetname);
   }
+  getExcel2() {
+    // this.gsv.set('api', 'signalrapi', 'https://localhost:44382/');
+    // // // console.log(this.gsv.get('api', 'signalrapi'));
+    const filename = 'C:\\Users\\ljudm\\source\\repos\\samples\\Files\\1.txt';
+    const env = 'https://localhost:44382/Files/';
+    const url = 'https://localhost:44382/Files/1.xlsx';
+    const name = '1.csv';
+    this.getExcelFromServer.emit(JSON.stringify(this.data2));
+    // this.gs.downloadFilesObservable([filename], env, ['xlsx', 'csv', 'txt']).subscribe(res => { }, err => { });
+    // this.gs.getAnyFilefromServerURL(env, name);
+    // this.ds.download(url);
+    // this.gs.downloadFileObservable(url, name).subscribe(res => { }, err => { });
+    // this.gs.download();
+    // this.http.get(path`, {responseType: 'blob'}).subscribe(file=> { const url:string = URL.createObjectURL(file); const link = document.createElement("a"); link.setAttribute("href", url); link.setAttribute("download", "Template.xlsx"); link.style.display = "none"; document.body.appendChild(link); link.click(); document.body.removeChild(link); });
+    // works
+    this.api.getExcel2(this.gsv.get('api', 'signalrapi'), 'dsdsds', this.data2).subscribe(x => {
+      //   const EXCEL_EXTENSION = '.xlsx';
+      //   // // // console.log(x);
+      //   const dataType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+      //   const binaryData = [];
+      //   binaryData.push(x);
+      //   const data: Blob = new Blob(binaryData, { type: dataType });
+      //   // const downloadLink = document.createElement('a');
+      //   // downloadLink.href = window.URL.createObjectURL(data);
+      //   // document.body.appendChild(downloadLink);
+      //   // downloadLink.dispatchEvent(new MouseEvent('click'));
+      //   FileSaver.saveAs(data, 'test_export_' + new Date().getTime() + EXCEL_EXTENSION);
+      //   // downloadLink.parentNode.removeChild(downloadLink);
+      //   // saveAs(x._body, 'test.xlsx');
+      //   // window.open(x);
+      //   // // Fetch the original image
+      //   // fetch('./1.xlsx')
+      //   //   // Retrieve its body as ReadableStream
+      //   //   .then(response => response.body);
+
+    });
+  }
   ngAfterViewInit() {
     // // // console.log(this.card._animationMode);
   }
@@ -115,5 +154,8 @@ export class CardComponent implements OnInit, OnChanges, AfterViewInit {
     const EXCEL_EXTENSION = '.xlsx';
     const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
     FileSaver.saveAs(data, fileName + EXCEL_EXTENSION);
+  }
+  public logData() {
+    console.log('template variable called');
   }
 }

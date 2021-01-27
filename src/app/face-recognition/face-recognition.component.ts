@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ChangeDetectionStrategy, OnInit, ViewChild, ElementRef, Renderer2, NgZone } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, ViewChild, ElementRef, Renderer2, NgZone, AfterViewInit } from '@angular/core';
 import { MatCard } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GeneralChartServices } from '@app/chart-js/services/data-service';
 import { FileUploadComponent } from '@app/components/file-upload/file-upload.component';
 import { OverlayMessageComponent } from '@app/components/overlay-message/overlay-message.component';
 import * as faceapi from 'face-api.js';
-import { OfflineService } from '../services/services';
+import { GenericServices, OfflineService } from '../services/services';
 import { WebWorker } from './web_worker';
 // https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API
 // https://school.geekwall.in/p/Hy29kFEGm/face-recognition-in-the-browser-with-tensorflow-js-javascript
@@ -32,7 +33,7 @@ export interface LabeledFaceDescriptors {
   styleUrls: ['./face-recognition.css'],
   // // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FaceRecognitionComponent implements OnInit {
+export class FaceRecognitionComponent implements OnInit, AfterViewInit {
   @ViewChild('video', { static: true }) videoElement: ElementRef;
   @ViewChild('c1', { static: true }) c1: MatCard;
   @ViewChild('canvasLast', { static: true }) canvasLast: ElementRef<HTMLCanvasElement>;
@@ -85,13 +86,14 @@ export class FaceRecognitionComponent implements OnInit {
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private httpClient: HttpClient,
-    private ngZone: NgZone) {
+    private ngZone: NgZone,
+    private gs: GenericServices) {
     if (window.location.hostname === 'localhost') {
       this.showUpload = true;
     } else {
       this.showUpload = false;
     }
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    if (this.gs.checkIfMobile()) {
       this.constraints.video.facingMode = 'user';
       this.text = 'Allow the browser to use your camera and tap on the video to capture image. The demo uses only browsers computing power, now backend server';
       this.mobileHide = true;
@@ -147,34 +149,34 @@ export class FaceRecognitionComponent implements OnInit {
     // faceapi.loadFaceRecognitionModel(this.MODEL_URL);
     // const json = require(this.MODEL_URL + '/face_recognition_model-weights_manifest.json');
     // console.log(json);
-    Promise.all([
-      this.loadF(this.MODEL_URL, 'loadSsdMobilenetv1Model')
-        .then(x => {
-          console.log(x);
-        })
-        .catch(err => { console.log(err); })
-        .finally(() => { console.log('done'); }),
-      this.loadF(this.MODEL_URL, 'loadFaceDetectionModel').then(x => {
-        console.log(x);
-      })
-        .catch(err => { console.log(err); })
-        .finally(() => { console.log('done'); }),
-      this.loadF(this.MODEL_URL, 'loadFaceLandmarkModel').then(x => {
-        console.log(x);
-      })
-        .catch(err => { console.log(err); })
-        .finally(() => { console.log('done'); }),
-      this.loadF(this.MODEL_URL, 'loadFaceRecognitionModel').then(x => {
-        console.log(x);
-      })
-        .catch(err => { console.log(err); })
-        .finally(() => { console.log('done'); })
-    ]).then((values) => {
-      console.log(values);
-    }).catch(err => console.log(err)).finally(() => {
-      console.log('done loading');
-      console.log(faceapi);
-    });
+    // Promise.all([
+    //   this.loadF(this.MODEL_URL, 'loadSsdMobilenetv1Model')
+    //     .then(x => {
+    //       console.log(x);
+    //     })
+    //     .catch(err => { console.log(err); })
+    //     .finally(() => { console.log('done'); }),
+    //   this.loadF(this.MODEL_URL, 'loadFaceDetectionModel').then(x => {
+    //     console.log(x);
+    //   })
+    //     .catch(err => { console.log(err); })
+    //     .finally(() => { console.log('done'); }),
+    //   this.loadF(this.MODEL_URL, 'loadFaceLandmarkModel').then(x => {
+    //     console.log(x);
+    //   })
+    //     .catch(err => { console.log(err); })
+    //     .finally(() => { console.log('done'); }),
+    //   this.loadF(this.MODEL_URL, 'loadFaceRecognitionModel').then(x => {
+    //     console.log(x);
+    //   })
+    //     .catch(err => { console.log(err); })
+    //     .finally(() => { console.log('done'); })
+    // ]).then((values) => {
+    //   console.log(values);
+    // }).catch(err => console.log(err)).finally(() => {
+    //   console.log('done loading');
+    //   console.log(faceapi);
+    // });
   }
   ngOnInit() {
     console.log(faceapi);
@@ -284,6 +286,52 @@ export class FaceRecognitionComponent implements OnInit {
     //     this.IsWait = true;
     // }, 200);
   }
+  async compareImagesWarmUp() {
+    // this.IsWait = true;
+    // this.ngZone.run(() => {
+    //   this.IsWait = true;
+    // });
+    setTimeout(async () => {
+      const x = await this.computeSingleFaceDescriptorsWarmUp(
+        this.canvasLast.nativeElement,
+        this.canvasPrior.nativeElement,
+        'Lyudmil', this.videoHeight,
+        this.videoWidth);
+      console.log(x);
+    }, 1);
+    // Promise.all([
+    //     // this.loadF(this.MODEL_URL, 'loadSsdMobilenetv1Model'),
+    //     this.loadF(this.MODEL_URL, 'loadFaceDetectionModel'),
+    //     this.loadF(this.MODEL_URL, 'loadFaceLandmarkModel'),
+    //     this.loadF(this.MODEL_URL, 'loadFaceRecognitionModel')
+    // ]).then((values) => {
+    //     console.log(values);
+    //     calc(this);
+    // })
+    //     .catch(err => console.log(err))
+    //     .finally(() => {
+    //         console.log('done loading');
+    //         console.log(faceapi);
+    //         // calc(this);
+    //     });
+    // async function calc(t: any) {
+    //     const x = await t.computeSingleFaceDescriptors(
+    //         t.canvasLast.nativeElement,
+    //         t.canvasPrior.nativeElement,
+    //         'Lyudmil', t.videoHeight,
+    //         t.videoWidth);
+    //     console.log(x);
+    //     if (x <= t.maxDescriptorDistance) {
+    //         t.matched = 'The faces belong to one person!';
+    //         t.openDialog(t.matched);
+    //     }
+    //     t.IsWait = false;
+    // }
+    // const imagebase64data = imageprior;
+    // setTimeout(async () => {
+    //     this.IsWait = true;
+    // }, 200);
+  }
   // The neural nets accept HTML image, canvasLast or video elements or tensors as inputs.
   async computeSingleFaceDescriptors(
     canvaslast: any, canvasprior: any, name: string,
@@ -332,6 +380,39 @@ export class FaceRecognitionComponent implements OnInit {
       const results = [fullFaceDescriptionLast].map(fd => faceMatcher.findBestMatch(fd.descriptor));
       // tslint:disable-next-line: no-string-literal
       r1 = results[0]['_distance'];
+    } catch (e) {
+      console.log(e);
+    }
+    finally {
+      // return r1;
+      console.log('done');
+    }
+    return r1;
+  }
+  async computeSingleFaceDescriptorsWarmUp(
+    canvaslast: any, canvasprior: any, name: string,
+    h: number, w: number): Promise<number> {
+    // this.IsWait = true;
+    const d: IDimensions = { width: w, height: h };
+    const r1 = 1;
+    // const descObj = this.os.getCache('localStorage', 'desc', 'object')[0];
+    // const arrDesc = [];
+    // Object.keys(descObj).forEach(key => {
+    //     arrDesc.push(descObj[key]);
+    // });
+    // const faceDescriptorCache = [Float32Array.from(arrDesc, z => z)];
+    // https://itnext.io/face-api-js-javascript-api-for-face-recognition-in-the-browser-with-tensorflow-js-bcc2a6c4cf07
+    // // For all faces
+    // const fullFaceDescriptions = await faceapi.detectAllFaces(canvas).withFaceLandmarks().withFaceDescriptors();
+    // if (typeof fullFaceDescriptions !== 'undefined') {
+    //     fullFaceDescriptions.forEach(x => {
+    //         faceapi.draw.drawDetections(canvas, x);
+    //         faceapi.draw.drawFaceLandmarks(canvas, x);
+    //     });
+    // }
+    // For single face
+    try {
+      await faceapi.detectSingleFace(canvaslast).withFaceLandmarks().withFaceDescriptor();
     } catch (e) {
       console.log(e);
     }
@@ -442,5 +523,39 @@ export class FaceRecognitionComponent implements OnInit {
   }
   ngAfterViewInit() {
     console.log(this.c1);
+    // this.compareImagesWarmUp();
+    // faceapi.nets.faceRecognitionNet.loadFromUri(this.MODEL_URL);
+    this.loadingNow();
+  }
+  loadingNow() {
+    Promise.all([
+      this.loadF(this.MODEL_URL, 'loadSsdMobilenetv1Model')
+        .then(x => {
+          console.log(x);
+        })
+        .catch(err => { console.log(err); })
+        .finally(() => { console.log('done'); }),
+      this.loadF(this.MODEL_URL, 'loadFaceDetectionModel').then(x => {
+        console.log(x);
+      })
+        .catch(err => { console.log(err); })
+        .finally(() => { console.log('done'); }),
+      this.loadF(this.MODEL_URL, 'loadFaceLandmarkModel').then(x => {
+        console.log(x);
+      })
+        .catch(err => { console.log(err); })
+        .finally(() => { console.log('done'); }),
+      this.loadF(this.MODEL_URL, 'loadFaceRecognitionModel').then(x => {
+        console.log(x);
+      })
+        .catch(err => { console.log(err); })
+        .finally(() => { console.log('done'); })
+    ]).then((values) => {
+      console.log(values);
+    }).catch(err => console.log(err)).finally(() => {
+      console.log('done loading');
+      console.log(faceapi);
+      this.compareImagesWarmUp();
+    });
   }
 }

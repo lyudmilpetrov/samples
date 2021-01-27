@@ -54,7 +54,7 @@ import { ProgressInfoModule } from '@app/components/progress-info/progress-info.
     RadarChartComponent,
     SliderComponent
   ],
-  providers: [Globals, TasksService, OfflineService, ApiServices,
+  providers: [Globals,
     //  ToastrService
     { provide: TOASTR_TOKEN, useValue: toastr }
   ],

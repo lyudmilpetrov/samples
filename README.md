@@ -4,7 +4,7 @@ https://github.com/Janghyun1230/Speaker_Verification
 
 https://github.com/MohamadMerchant/Voice-Authentication-and-Face-Recognition
 
-
+ sdadasd
 ng serve --prod=true --watch=true
 
 ng build --prod=true

@@ -1,5 +1,5 @@
 https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/get-started-speaker-recognition?tabs=script&pivots=programming-language-javascript
-
+123
 https://github.com/Janghyun1230/Speaker_Verification
 
 https://github.com/MohamadMerchant/Voice-Authentication-and-Face-Recognition

@@ -59,6 +59,18 @@ export class ChartJSComponent implements OnInit, OnDestroy, AfterViewInit {
     private os: OfflineService,
     private OAS: ObservableAsService) {
 
+    // this.initilizeAll();
+    // this.Slider_Data_1_Subscription = this.OAS.ObservableSlider_Bar_1.subscribe(x => {
+    //   // x);
+    //   if (Object.keys(x).length !== 0) {
+    //     this.showdata = false;
+    //     this.Slider_Data_1 = x;
+    //     this.updateData(this.Slider_Data_1);
+    //   }
+    // });
+  }
+  ngOnInit() {
+    this.breakpoint = (window.innerWidth <= 400) ? 1 : 2;
     this.initilizeAll();
     this.Slider_Data_1_Subscription = this.OAS.ObservableSlider_Bar_1.subscribe(x => {
       // x);
@@ -68,9 +80,6 @@ export class ChartJSComponent implements OnInit, OnDestroy, AfterViewInit {
         this.updateData(this.Slider_Data_1);
       }
     });
-  }
-  ngOnInit() {
-    this.breakpoint = (window.innerWidth <= 400) ? 1 : 2;
   }
   onResize(event) {
     this.breakpoint = (event.target.innerWidth <= 4) ? 1 : 2;

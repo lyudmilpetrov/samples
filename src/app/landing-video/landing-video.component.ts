@@ -11,14 +11,19 @@ export class LandingVideoComponent implements OnInit, AfterViewInit {
   constructor(
   ) { }
   ngOnInit() {
-
-  }
-  ngAfterViewInit() {
     const menuToggle = document.querySelector('.toggle');
     const showcase = document.querySelector('.showcase');
     menuToggle.addEventListener('click', () => {
       menuToggle.classList.toggle('active');
       showcase.classList.toggle('active');
     });
+  }
+  ngAfterViewInit() {
+    // const menuToggle = document.querySelector('.toggle');
+    // const showcase = document.querySelector('.showcase');
+    // menuToggle.addEventListener('click', () => {
+    //   menuToggle.classList.toggle('active');
+    //   showcase.classList.toggle('active');
+    // });
   }
 }

@@ -147,6 +147,39 @@ export class FaceRecognitionComponent implements OnInit {
     // faceapi.loadFaceRecognitionModel(this.MODEL_URL);
     // const json = require(this.MODEL_URL + '/face_recognition_model-weights_manifest.json');
     // console.log(json);
+    // Promise.all([
+    //   this.loadF(this.MODEL_URL, 'loadSsdMobilenetv1Model')
+    //     .then(x => {
+    //       console.log(x);
+    //     })
+    //     .catch(err => { console.log(err); })
+    //     .finally(() => { console.log('done'); }),
+    //   this.loadF(this.MODEL_URL, 'loadFaceDetectionModel').then(x => {
+    //     console.log(x);
+    //   })
+    //     .catch(err => { console.log(err); })
+    //     .finally(() => { console.log('done'); }),
+    //   this.loadF(this.MODEL_URL, 'loadFaceLandmarkModel').then(x => {
+    //     console.log(x);
+    //   })
+    //     .catch(err => { console.log(err); })
+    //     .finally(() => { console.log('done'); }),
+    //   this.loadF(this.MODEL_URL, 'loadFaceRecognitionModel').then(x => {
+    //     console.log(x);
+    //   })
+    //     .catch(err => { console.log(err); })
+    //     .finally(() => { console.log('done'); })
+    // ]).then((values) => {
+    //   console.log(values);
+    // }).catch(err => console.log(err)).finally(() => {
+    //   console.log('done loading');
+    //   console.log(faceapi);
+    // });
+  }
+  ngOnInit() {
+    console.log(faceapi);
+    this.breakpoint = (window.innerWidth <= 400) ? 1 : 2;
+    // this.openDialog();
     Promise.all([
       this.loadF(this.MODEL_URL, 'loadSsdMobilenetv1Model')
         .then(x => {
@@ -175,11 +208,6 @@ export class FaceRecognitionComponent implements OnInit {
       console.log('done loading');
       console.log(faceapi);
     });
-  }
-  ngOnInit() {
-    console.log(faceapi);
-    this.breakpoint = (window.innerWidth <= 400) ? 1 : 2;
-    // this.openDialog();
     this.startCamera();
 
   }

@@ -34,7 +34,11 @@
                         ],
                         "scripts": [
                             "./node_modules/toastr/build/toastr.min.js",
-                            "./node_modules/html2canvas/dist/html2canvas.min.js"
+                            "./node_modules/html2canvas/dist/html2canvas.min.js",
+                            "./src/assets/js/JSPrintManager.js",
+                            "./src/assets/js/zip.js",
+                            "./src/assets/js/zip-ext.js",
+                            "./src/assets/js/deflate.js"
                         ],
                         "customWebpackConfig": {
                             "path": "./custom-webpack.config.js"

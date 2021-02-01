@@ -149,6 +149,41 @@ export class FaceLoginComponent implements OnInit {
     // faceapi.loadFaceRecognitionModel(this.MODEL_URL);
     // const json = require(this.MODEL_URL + '/face_recognition_model-weights_manifest.json');
     // console.log(json);
+    // Promise.all([
+    //   this.loadF(this.MODEL_URL, 'loadSsdMobilenetv1Model')
+    //     .then(x => {
+    //       console.log(x);
+    //     })
+    //     .catch(err => { console.log(err); })
+    //     .finally(() => { console.log('done'); }),
+    //   this.loadF(this.MODEL_URL, 'loadFaceDetectionModel').then(x => {
+    //     console.log(x);
+    //   })
+    //     .catch(err => { console.log(err); })
+    //     .finally(() => { console.log('done'); }),
+    //   this.loadF(this.MODEL_URL, 'loadFaceLandmarkModel').then(x => {
+    //     console.log(x);
+    //   })
+    //     .catch(err => { console.log(err); })
+    //     .finally(() => { console.log('done'); }),
+    //   this.loadF(this.MODEL_URL, 'loadFaceRecognitionModel').then(x => {
+    //     console.log(x);
+    //   })
+    //     .catch(err => { console.log(err); })
+    //     .finally(() => { console.log('done'); })
+    // ]).then((values) => {
+    //   console.log(values);
+    // }).catch(err => console.log(err)).finally(() => {
+    //   console.log('done loading');
+    //   console.log(faceapi);
+    // });
+  }
+  ngOnInit() {
+    // this.toastr.setTopCentered();
+    this.toastr.options.positionClass = 'toast-top-center';
+    this.toastr.success('open now', 'title');
+    console.log(faceapi);
+    this.breakpoint = (window.innerWidth <= 400) ? 1 : 2;
     Promise.all([
       this.loadF(this.MODEL_URL, 'loadSsdMobilenetv1Model')
         .then(x => {
@@ -177,13 +212,6 @@ export class FaceLoginComponent implements OnInit {
       console.log('done loading');
       console.log(faceapi);
     });
-  }
-  ngOnInit() {
-    // this.toastr.setTopCentered();
-    this.toastr.options.positionClass = 'toast-top-center';
-    this.toastr.success('open now', 'title');
-    console.log(faceapi);
-    this.breakpoint = (window.innerWidth <= 400) ? 1 : 2;
     // this.openDialog();
     // this.startCamera();
     // this.openLoginForm('now');

@@ -6,6 +6,7 @@ import { ApiServices, DataServices, GenericServices } from '@app/services/servic
 import { GlobalStaticVariables } from '@app/shared/globals';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
+declare var JSPM: any;
 @Component({
   selector: 'app-dashboards-card',
   templateUrl: './card.component.html',
@@ -15,6 +16,7 @@ export class CardComponent implements OnInit, OnChanges, AfterViewInit {
   @ViewChild('cardEl') card: MatCard;
   @Input() title: string;
   @Input() data: string;
+
   data2: any[] = [];
   titlestr: string[];
   constructor(private api: ApiServices, private gsv: GlobalStaticVariables, private ds: DataServices, private gs: GenericServices) { }
@@ -29,7 +31,41 @@ export class CardComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
   ngOnInit(): void {
-    this.titlestr = this.title.split(',');
+    console.log(JSPM);
+    JSPM.JSPrintManager.license_url = 'https://neodynamic.com/licenses/jspm/v3/demo';
+    JSPM.JSPrintManager.auto_reconnect = true;
+    JSPM.JSPrintManager.start();
+    JSPM.JSPrintManager.WS.onStatusChanged = () => {
+      if (this.jspmWSStatus()) {
+        // get client installed printers
+        JSPM.JSPrintManager.getPrinters().then((myPrinters: string[]) => {
+          // this.printers = myPrinters;
+          console.log(myPrinters);
+          // this.doPrintPDF();
+        });
+      }
+    };
+    // let spawn = require('child_process').spawn;
+    // spawn('powershell.exe', ['.\download-packages-license.ps1']);
+    // this.titlestr = this.title.split(',');
+    // Create the PS Instance
+    // let ps = new powershell({
+    //   executionPolicy: 'Bypass',
+    //   noProfile: true
+    // });
+
+    // // Load the gun
+    // ps.addCommand(`Roads? Where we're going, we don't need roads.`)
+
+    // // Pull the Trigger
+    // ps.invoke()
+    //   .then(output => {
+    //     console.log(output);
+    //   })
+    //   .catch(err => {
+    //     console.error(err);
+    //     ps.dispose();
+    //   });
     // this.data2 = this.data;
     // // // // console.log(this.titlestr);
     // // console.log(this.data2);
@@ -115,5 +151,79 @@ export class CardComponent implements OnInit, OnChanges, AfterViewInit {
     const EXCEL_EXTENSION = '.xlsx';
     const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
     FileSaver.saveAs(data, fileName + EXCEL_EXTENSION);
+  }
+  silentPrinting() {
+
+  }
+  jspmWSStatus() {
+    if (JSPM.JSPrintManager.websocket_status === JSPM.WSStatus.Open) {
+      return true;
+    } else if (JSPM.JSPrintManager.websocket_status === JSPM.WSStatus.Closed) {
+      alert('JSPrintManager (JSPM) is not installed or not running! Download JSPM Client App from https://neodynamic.com/downloads/jspm');
+      return false;
+    } else if (JSPM.JSPrintManager.websocket_status === JSPM.WSStatus.Blocked) {
+      alert('JSPM has blocked this website!');
+      return false;
+    }
+  }
+  doPrintZPL() {
+    // console.log(this.selectedPrinter);
+    // if (this.selectedPrinter !== 'undefined' && this.jspmWSStatus()) {
+    // Create a ClientPrintJob
+    const cpj = new JSPM.ClientPrintJob();
+    // // Set Printer type (Refer to the help, there many of them!)
+    // //https://www.neodynamic.com/Products/Help/JSPrintManager2.0/articles/jsprintmanager.html#client-printer-types
+    // if (this.isDefaultPrinterSelected) {
+    //   cpj.clientPrinter = new JSPM.DefaultPrinter();
+    // } else {
+    cpj.clientPrinter = new JSPM.InstalledPrinter('Brother DCP-1610W series Printer');
+    // }
+
+    // Set content to print...
+    // Create Zebra ZPL commands for sample label
+    let cmds = '^XA';
+    cmds += '^FO20,30^GB750,1100,4^FS';
+    cmds += '^FO20,30^GB750,200,4^FS';
+    cmds += '^FO20,30^GB750,400,4^FS';
+    cmds += '^FO20,30^GB750,700,4^FS';
+    cmds += '^FO20,226^GB325,204,4^FS';
+    cmds += '^FO30,40^ADN,36,20^FDShip to:^FS';
+    cmds += '^FO30,260^ADN,18,10^FDPart number #^FS';
+    cmds += '^FO360,260^ADN,18,10^FDDescription:^FS';
+    cmds += '^FO30,750^ADN,36,20^FDFrom:^FS';
+    cmds += '^FO150,125^ADN,36,20^FDAcme Printing^FS';
+    cmds += '^FO60,330^ADN,36,20^FD14042^FS';
+    cmds += '^FO400,330^ADN,36,20^FDScrew^FS';
+    cmds += '^FO70,480^BY4^B3N,,200^FD12345678^FS';
+    cmds += '^FO150,800^ADN,36,20^FDMacks Fabricating^FS';
+    cmds += '^XZ';
+    cpj.printerCommands = cmds;
+
+    console.log(cmds);
+    // Send print job to printer!
+    cpj.sendToClient();
+    // }
+  }
+  doPrintPDF() {
+    // console.log(this.selectedPrinter);
+    // if (this.selectedPrinter !== 'undefined' && this.jspmWSStatus()) {
+    // Create a ClientPrintJob
+    const cpj = new JSPM.ClientPrintJob();
+    // Set Printer type (Refer to the help, there many of them!)
+    // if ( this.isDefaultPrinterSelected ) {
+    //       cpj.clientPrinter = new JSPM.DefaultPrinter();
+    //     } else {
+    cpj.clientPrinter = new JSPM.InstalledPrinter('Brother DCP-1610W series Printer');
+    // }
+
+    // Set content to print...
+    // Set PDF file... for more advanced PDF settings please refer to
+    // https://www.neodynamic.com/Products/Help/JSPrintManager2.0/apiref/classes/jspm.printfilepdf.html
+    let my_file = new JSPM.PrintFilePDF('https://neodynamic.com/temp/LoremIpsum.pdf', JSPM.FileSourceType.URL, 'MyFile.pdf', 1);
+
+    cpj.files.push(my_file);
+
+    // Send print job to printer!
+    cpj.sendToClient();
   }
 }

@@ -13,6 +13,7 @@ export const routes: Routes = [
   { path: 'face-mesh', loadChildren: () => import('./face-mesh/face-mesh.module').then(m => m.FaceMeshModule) },
   { path: 'maps', loadChildren: () => import('./maps/maps.module').then(m => m.MapsModule) },
   { path: 'landing-video', loadChildren: () => import('./landing-video/landing-video.module').then(m => m.LandingVideoModule) },
+  { path: 'webrtc', loadChildren: () => import('./web-rtc/web-rtc.module').then(m => m.WebRTCModule) },
   { path: '**', redirectTo: 'chart-js', pathMatch: 'full' }
 ];
 

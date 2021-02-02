@@ -49,7 +49,7 @@ export class MainNavComponent implements OnInit, AfterViewInit {
       filter(([a, b]) => b && a instanceof NavigationEnd)
     ).subscribe(_ => this.drawer.close());
     if (window.location.hostname === 'localhost') {
-      this.menuItems = ['Chart.js', 'Face-Login', 'Face-Recognition', 'Face-Mesh', 'Maps', 'Landing-video'];
+      this.menuItems = ['Chart.js', 'Face-Login', 'Face-Recognition', 'Face-Mesh', 'Maps', 'Landing-video', 'WebRTC'];
     } else {
       this.menuItems = ['Chart.js', 'Face-Recognition', 'Landing-video'];
     }

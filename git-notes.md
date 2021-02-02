@@ -1,5 +1,7 @@
 https://www.freecodecamp.org/news/how-to-use-branches-in-git/
 
+https://www.freecodecamp.org/news/how-to-undo-mistakes-with-git/
+
 # to get it locally
 git clone repo_path_here
 # check status
@@ -103,4 +105,15 @@ git log branch-A..branch-B
 # Of course, you could also use this to compare your local and remote states by writing something like
 
 git log main..origin/main
+
+
+
+# GIT UNDO MISTAKES
+
+git status
+git diff <filename>
+git restore <filename>
+
+# Discarding local uncommited changes cannot be undone
+
 

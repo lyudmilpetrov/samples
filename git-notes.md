@@ -1,3 +1,5 @@
+https://www.freecodecamp.org/news/how-to-use-branches-in-git/
+
 # to get it locally
 git clone repo_path_here
 # check status
@@ -56,4 +58,49 @@ git switch <other-branch>
 
 git push -u origin <local-branch>
 # -u flag it tells Git to establish a "tracking connection" which will make pushing and pulling much easier in the future.
+
+# This also works the other way around: when creating a local branch that should be based on a remote one. In other words, when you want to track a remote branch:
+
+git branch --track <new-branch> origin/<base-branch>
+
+# Alternatively, you could also use the git checkout command to achieve this. If you want to name the local branch after the remote one, you only have to specify the remote branch's name:
+
+git checkout --track origin/<base-branch>
+
+# Delete local branch
+
+git branch -d <branch-name>
+
+# Note that you might also need the -f option in case you're trying to delete a branch that contains un-merged changes. Use this option with care because it makes losing data very easy!
+
+# To delete a remote branch, we cannot use the git branch command. Instead, git push will do the trick, using the --delete flag:
+
+git push origin --delete <branch-name>
+
+# Merging is probably the most popular way to integrate changes. It allows you to bring all of the new commits from another branch into your current HEAD branch.
+# One of the great things about Git is that merging branches is so simple and stress-free. It requires just two steps:
+
+# (1) Check out the branch that should receive the changes
+git switch main
+	
+# (2) Execute the "merge" command with the name of the branch that contains the desired changes
+git merge feature/contact-form
+
+
+# An alternative way to integrate commits from another branch is using rebase. And I'm very careful to call it an "alternative" way: it's not better or worse, but simply different.
+
+# (1) Check out the branch that should receive the changes
+git switch feature/contact-form
+	
+# (2) Execute the "rebase" command with the name of the branch that contains the desired changes
+git rebase main
+
+# Comparing branches
+# To see which commits are in branch-B but not in branch-A, you can use the git log command with the double dot syntax:
+
+git log branch-A..branch-B
+
+# Of course, you could also use this to compare your local and remote states by writing something like
+
+git log main..origin/main
 

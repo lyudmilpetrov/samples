@@ -115,5 +115,9 @@ git diff <filename>
 git restore <filename>
 
 # Discarding local uncommited changes cannot be undone
+# Discarding all uncommited changes
+git restore .
 
 
+# Updating the commit message
+git commit --amend -m "New message for the commit"

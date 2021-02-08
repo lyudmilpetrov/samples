@@ -1,4 +1,4 @@
-<mat-sidenav-container class="sidenav-container">
+<!-- <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
         <mat-toolbar style="cursor: pointer;" [routerLink]="['/home']">
             <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon>
@@ -22,4 +22,72 @@
     </mat-sidenav-content>
 </mat-sidenav-container>
 <app-progress-info [sentToSignalRChannel]="sentToSignalRChannel" (outputmessageEvent)="receiveFromSignalR($event)">
+</app-progress-info> -->
+
+<!-- <mat-toolbar *ngIf="!hidenav">
+  Card view demo
+</mat-toolbar>
+<div class="content" *ngIf="!hidenav">
+  <mat-card class="mat-elevation-z4">
+    <mat-card-header>
+      <mat-card-title>Himalayan Peaks</mat-card-title>
+    </mat-card-header>
+    <img mat-card-image src="">
+    <mat-card-content>
+      <p>
+        The Himalayas is a mountain range in Asia.
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button>LIKE</button>
+      <button mat-button (click)="selected('chart-js')">SHARE</button>
+    </mat-card-actions>
+  </mat-card>
+</div> 
+<router-outlet *ngIf="hidenav"></router-outlet> -->
+<mat-toolbar>
+    <div fxShow="true" fxHide.lt-md="true">
+       <a mat-button *ngFor="let item of menuItems" mat-list-item (click)="selected(item)">{{item}}</a>
+    </div>
+    <div fxShow="true" fxHide.gt-sm="true">
+        <mat-icon aria-label="Side nav toggle icon" (click)="sidenav.toggle()">menu</mat-icon>
+    </div>
+    <span class="spacer-left"></span>
+    <span>Welcome</span>
+</mat-toolbar>
+<mat-sidenav-container fxFlexFill class="side-panel">
+    <mat-sidenav #sidenav fxLayout="column" color="primary">
+        <div fxLayout="column">
+            <a (click)="sidenav.toggle()" mat-button><mat-icon>close</mat-icon></a>
+            <a mat-button *ngFor="let item of menuItems" mat-list-item (click)="selected(item)">{{item}}</a>
+        </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <router-outlet></router-outlet>
+        <app-footer></app-footer>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+<app-progress-info [sentToSignalRChannel]="sentToSignalRChannel" (outputmessageEvent)="receiveFromSignalR($event)">
 </app-progress-info>
+
+<!-- <mat-toolbar *ngIf="!hidenav">
+  Card view demo
+</mat-toolbar>
+<div class="content" *ngIf="!hidenav">
+  <mat-card class="mat-elevation-z4">
+    <mat-card-header>
+      <mat-card-title>Himalayan Peaks</mat-card-title>
+    </mat-card-header>
+    <img mat-card-image src="">
+    <mat-card-content>
+      <p>
+        The Himalayas is a mountain range in Asia.
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button>LIKE</button>
+      <button mat-button (click)="selected('chart-js')">SHARE</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+<router-outlet *ngIf="hidenav"></router-outlet> -->

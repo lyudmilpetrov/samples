@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ChangeDetectionStrategy, OnInit, ViewChild, ElementRef, Renderer2, NgZone } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, ViewChild, ElementRef, Renderer2, NgZone, Inject } from '@angular/core';
 import { MatCard } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileUploadComponent } from '@app/components/file-upload/file-upload.component';
 import { OverlayMessageComponent } from '@app/components/overlay-message/overlay-message.component';
+import { TOASTR_TOKEN } from '@app/services/toastr.service';
 import * as faceapi from 'face-api.js';
 import { GenericServices, OfflineService } from '../services/services';
 import { WebWorker } from './web_worker';
@@ -80,6 +81,7 @@ export class FaceRecognitionComponent implements OnInit {
   screenWidth: any;
   screenHeight: any;
   constructor(
+    @Inject(TOASTR_TOKEN) private toastr: Toastr,
     private renderer: Renderer2,
     private os: OfflineService,
     private dialog: MatDialog,
@@ -143,6 +145,8 @@ export class FaceRecognitionComponent implements OnInit {
   }
   handleError(error) {
     console.log('Error: ', error);
+    this.toastr.options.positionClass = 'toast-top-center';
+    this.toastr.error(error, 'Issue!');
   }
   attachVideo(stream) {
     this.renderer.setProperty(this.videoElement.nativeElement, 'srcObject', stream);
@@ -156,7 +160,8 @@ export class FaceRecognitionComponent implements OnInit {
     if (!!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
       navigator.mediaDevices.getUserMedia(this.constraints).then(this.attachVideo.bind(this)).catch(this.handleError);
     } else {
-      alert('Camera not available.');
+      this.toastr.options.positionClass = 'toast-top-center';
+      this.toastr.error('Camera not available!', 'Issue!');
     }
   }
   captureImageFirst() {

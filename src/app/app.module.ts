@@ -24,6 +24,7 @@ import * as toastr from 'toastr';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { ProgressInfoModule } from '@app/components/progress-info/progress-info.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
 // const toastr = window['toastr'];
 
 @NgModule({
@@ -35,6 +36,7 @@ import { ProgressInfoModule } from '@app/components/progress-info/progress-info.
     ReactiveFormsModule,
     FormsModule,
     CommonModule,
+    FlexLayoutModule,
     HttpClientModule,
     OverlayModule,
     ProgressInfoModule,

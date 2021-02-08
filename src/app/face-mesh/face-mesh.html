@@ -1,10 +1,11 @@
-<mat-card>
+<!-- <mat-card>
     <mat-card-header>
         <mat-card-subtitle>
             <mat-chip selected="true" class="pointer">Compare images</mat-chip>
         </mat-card-subtitle>
     </mat-card-header>
     <div class="p-1">
+        <canvas #canvasOutput></canvas>
         <video #video class="vid" autoplay muted></video>
     </div>
     <mat-card-content>
@@ -19,3 +20,23 @@
         </mat-chip-list>
     </mat-card-actions>
 </mat-card>
+<div class="wrapper" *ngIf="!showdata">
+    <mat-spinner [strokeWidth]="2" [diameter]="192" mode="indeterminate"></mat-spinner>
+</div> -->
+
+<!-- <canvas #output></canvas>
+<video #video playsinline style="
+    visibility: hidden;
+    width: auto;
+    height: auto;
+    ">
+</video> -->
+<section #section class="invisible">
+
+    <p>Hold some objects up close to your webcam to get a real-time classification! When ready click "enable webcam" below and accept access to the webcam when the browser asks (check the top left of your window)</p>
+
+    <div #liveView class="camView">
+        <button #webcamb id="webcamButton" (click)="startCamera()">Enable Webcam</button>
+        <video #video autoplay width="640" height="480"></video>
+    </div>
+</section>

@@ -41,6 +41,8 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
   ngOnInit() {
+    // To reload on refresh
+    // this.router.navigate(['']);
   }
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks

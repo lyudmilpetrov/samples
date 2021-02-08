@@ -1,4 +1,39 @@
+.added-icon {
+    padding: 0 14px;
+}
+
+.spacer-left {
+    flex: 1 1 auto;
+}
+
 .sidenav-container {
+    height: 95vh !important;
+}
+
+.sidenav {
+    width: 200px;
+}
+
+.sidenav .mat-toolbar {
+    background: inherit;
+}
+
+.mat-toolbar {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: rgb(91, 17, 252);
+}
+
+.content {
+    padding: 16px;
+}
+
+.content > mat-card {
+    width: 200px;
+}
+/* .sidenav-container {
   height: 100%;
 }
 
@@ -15,3 +50,11 @@
   top: 0;
   z-index: 1;
 }
+
+.content {
+    padding: 16px;
+}
+
+.content > mat-card {
+    width: 200px;
+} */

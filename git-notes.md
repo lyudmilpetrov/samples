@@ -121,3 +121,24 @@ git restore .
 
 # Updating the commit message
 git commit --amend -m "New message for the commit"
+
+# Reverting changes within a given commit
+git revert <hash tag of the commit>
+
+# Going back in time
+
+git reset --hard <hash tag of the commit>
+
+# On the file it will be 
+
+git restore --source <hash tag of the commit> <file path>
+
+
+# Working with Git journal
+
+git reflog
+
+# Once you have the revisions you can start new branch before the mistake
+
+git branch <new branch name> <hash tag of the commit>
+

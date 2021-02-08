@@ -1,11 +1,16 @@
 <div class="grid-container">
-    <h1 style="margin-left: 5%;">Visualization sample, please use the slider to check prior time periods, covering last 12 months as of the end of the month</h1>
+    <h1 style="
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin-top:10px;">Visualization sample, please use the slider to check prior time periods, covering last 12 months as of the end of the month</h1>
     <div style="margin-left: 5%; margin-right: 5%;">
         <app-dashboards-slider [id]="forSlider_1"></app-dashboards-slider>
     </div>
-    <mat-grid-list [cols]="breakpoint" rowHeight="250px" (window:resize)="onResize($event)">
+    <mat-grid-list [cols]="breakpoint" rowHeight="35vh" (window:resize)="onResize($event)">
         <!--Table-->
-        <mat-grid-tile [colspan]="1" [rowspan]="3">
+        <mat-grid-tile [colspan]="1" [rowspan]="2">
             <app-dashboards-card title="{{titleForCard0}}" data="{{data}}">
                 <div added-element>
                     <mat-spinner style="margin:0 auto;" mode="indeterminate" *ngIf="!showdata"></mat-spinner>

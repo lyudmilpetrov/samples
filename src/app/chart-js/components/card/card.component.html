@@ -1,20 +1,18 @@
-<div fxLayout="column" fxLayoutAlign="space-around stretch">
-    <mat-card #cardEl class="dashboard-card" fxLayoutAlign="stretch">
-        <mat-card-header>
-            <mat-card-title>
-                {{titlestr[0]}}
-                <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-                <mat-menu #menu="matMenu" xPosition="before">
-                    <button mat-menu-item (click)="captureScreen()">Get PDF</button>
-                    <button mat-menu-item (click)="getExcel(data2)">Get raw data in excel</button>
-                </mat-menu>
-            </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content" id="contentToConvert{{titlestr[1]}}">
-            <ng-content select=[added-element]>
-            </ng-content>
-        </mat-card-content>
-    </mat-card>
-</div>
+<mat-card #cardEl class="dashboard-card">
+    <mat-card-header>
+        <mat-card-title>
+            {{titlestr[0]}}
+            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+                <button mat-menu-item (click)="captureScreen()">Get PDF</button>
+                <button mat-menu-item (click)="getExcel(data2)">Get raw data in excel</button>
+            </mat-menu>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="dashboard-card-content" id="contentToConvert{{titlestr[1]}}">
+        <ng-content select=[added-element]>
+        </ng-content>
+    </mat-card-content>
+</mat-card>

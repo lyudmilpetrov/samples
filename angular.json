@@ -25,7 +25,8 @@
                             "src/assets/json",
                             "src/assets/weights",
                             "src/app/face-recognition/models",
-                            "src/manifest.webmanifest"
+                            "src/manifest.webmanifest",
+                            "src/web.config"
                         ],
                         "styles": [
                             "./node_modules/toastr/build/toastr.min.css",

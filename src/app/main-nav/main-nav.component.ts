@@ -25,17 +25,11 @@ export class MainNavComponent implements OnInit, AfterViewInit {
     },
     Json: ''
   };
-  @ViewChild('drawer', { static: true }) drawer: MatSidenav;
-  @ViewChild('top', { static: true }) top: MatToolbar;
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => result.matches),
-      shareReplay()
-    );
   menuItems = ['Chart.js'];
   LabelStr = '';
   hidetop = false;
   hidetop2 = false;
+  hidenav = false;
   sentToSignalRChannel = '';
   items: ChannelEvent[] = [];
   constructor(
@@ -43,11 +37,6 @@ export class MainNavComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef) {
-    // console.log(window.location.hostname);
-    router.events.pipe(
-      withLatestFrom(this.isHandset$),
-      filter(([a, b]) => b && a instanceof NavigationEnd)
-    ).subscribe(_ => this.drawer.close());
     if (window.location.hostname === 'localhost') {
       this.menuItems = ['Chart.js', 'Face-Login', 'Face-Recognition', 'Face-Mesh', 'Maps', 'Landing-video', 'WebRTC'];
     } else {
@@ -56,30 +45,15 @@ export class MainNavComponent implements OnInit, AfterViewInit {
     this.LabelStr = this.menuItems[0];
   }
   selected(s: string) {
+    this.hidenav = true;
     this.LabelStr = s;
     const x = s.toLocaleLowerCase().replace(' ', '').replace('.', '-');
+    console.log(x);
     this.router.navigate([x]);
     this.hidetop = false;
     this.hidetop2 = false;
   }
-  ngOnInit() {
-    // // // // // console.log('called');
-  }
-  expand() {
-    this.drawer.close();
-    if (this.LabelStr === 'Landing-video') {
-      this.hidetop = false;
-      this.hidetop2 = true;
-    } else {
-      this.hidetop = true;
-      this.hidetop2 = false;
-    }
-  }
-  shrink() {
-    this.drawer.open();
-    this.hidetop = false;
-    this.hidetop2 = false;
-  }
+  ngOnInit() {}
   receiveFromSignalR($event: ChannelEvent) {
     // // // // // // // // console.log($event);
     if (typeof $event.Data.State !== 'undefined') {
@@ -92,6 +66,6 @@ export class MainNavComponent implements OnInit, AfterViewInit {
     }
   }
   ngAfterViewInit() {
-    this.sentToSignalRChannel = 'signalrdemo';
+      this.sentToSignalRChannel = 'signalrdemo';
   }
 }

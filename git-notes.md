@@ -150,3 +150,6 @@ git branch --set-upstream-to=<branch> tfc
 git branch --set-upstream-to=origin/main tfc
 # now tfc tracks remote/main to revert 
 git branch --set-upstream-to=origin/tfc tfc
+
+# To list branches
+git branch -r

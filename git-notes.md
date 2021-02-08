@@ -143,6 +143,13 @@ git reflog
 git branch <new branch name> <hash tag of the commit>
 
 # If you wish to set tracking information for this branch you can do so with:
-
+# that if we want to track remote branch from differetnt, not the local branch name that corresponds to remote branch name
 git branch --set-upstream-to=<remote>/<branch> tfc
+git branch --set-upstream-to=<branch> tfc
+# for example:
+git branch --set-upstream-to=origin/main tfc
+# now tfc tracks remote/main to revert 
+git branch --set-upstream-to=origin/tfc tfc
 
+# To list branches
+git branch -r

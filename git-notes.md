@@ -51,7 +51,7 @@ git push -u origin <new-name>
 # The current branch (also referred to as the HEAD branch) defines the context you're working in at the moment. Or in other words: the current HEAD branch is where new commits will be created.
 
 git checkout <other-branch>
-
+git checkout -b <other-branch>
 # or
 
 git switch <other-branch>
@@ -141,4 +141,8 @@ git reflog
 # Once you have the revisions you can start new branch before the mistake
 
 git branch <new branch name> <hash tag of the commit>
+
+# If you wish to set tracking information for this branch you can do so with:
+
+git branch --set-upstream-to=<remote>/<branch> tfc
 

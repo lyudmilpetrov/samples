@@ -37,12 +37,12 @@ export class AppComponent implements OnInit, OnDestroy {
     this.counter += 1;
     if (this.counter >= 1) {
       // console.log(this.signalrpoint);
-      this.ts.initilizeSignalR(this.signalrpoint, 'tasks');
+      // this.ts.initilizeSignalR(this.signalrpoint, 'tasks');
     }
   }
   ngOnInit() {
     // To reload on refresh
-    // this.router.navigate(['']);
+    this.router.navigate(['']);
   }
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks

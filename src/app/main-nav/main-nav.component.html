@@ -47,7 +47,7 @@
 <router-outlet *ngIf="hidenav"></router-outlet> -->
 <mat-toolbar>
     <div fxShow="true" fxHide.lt-md="true">
-       <a mat-button *ngFor="let item of menuItems" mat-list-item (click)="selected(item)">{{item}}</a>
+        <a mat-button *ngFor="let item of menuItems" (click)="selected(item)">{{item}}</a>
     </div>
     <div fxShow="true" fxHide.gt-sm="true">
         <mat-icon aria-label="Side nav toggle icon" (click)="sidenav.toggle()">menu</mat-icon>
@@ -58,8 +58,10 @@
 <mat-sidenav-container fxFlexFill class="side-panel">
     <mat-sidenav #sidenav fxLayout="column" color="primary">
         <div fxLayout="column">
-            <a (click)="sidenav.toggle()" mat-button><mat-icon>close</mat-icon></a>
-            <a mat-button *ngFor="let item of menuItems" mat-list-item (click)="selected(item)">{{item}}</a>
+            <a (click)="sidenav.toggle()" mat-button>
+                <mat-icon>close</mat-icon>
+            </a>
+            <a mat-button *ngFor="let item of menuItems" (click)="selected(item)">{{item}}</a>
         </div>
     </mat-sidenav>
     <mat-sidenav-content>

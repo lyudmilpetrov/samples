@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { MatCard } from '@angular/material/card';
@@ -13,7 +13,7 @@ declare var JSPM: any;
   styleUrls: ['./card.component.css']
 })
 export class CardComponent implements OnInit, OnChanges, AfterViewInit {
-  @ViewChild('cardEl') card: MatCard;
+  @ViewChild('cardEl') card: ElementRef;
   @Input() title: string;
   @Input() data: string;
 
@@ -31,20 +31,21 @@ export class CardComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
   ngOnInit(): void {
-    console.log(JSPM);
-    JSPM.JSPrintManager.license_url = 'https://neodynamic.com/licenses/jspm/v3/demo';
-    JSPM.JSPrintManager.auto_reconnect = true;
-    JSPM.JSPrintManager.start();
-    JSPM.JSPrintManager.WS.onStatusChanged = () => {
-      if (this.jspmWSStatus()) {
-        // get client installed printers
-        JSPM.JSPrintManager.getPrinters().then((myPrinters: string[]) => {
-          // this.printers = myPrinters;
-          console.log(myPrinters);
-          // this.doPrintPDF();
-        });
-      }
-    };
+    // console.log(JSPM);
+    // console.log(this.card);
+    // JSPM.JSPrintManager.license_url = 'https://neodynamic.com/licenses/jspm/v3/demo';
+    // JSPM.JSPrintManager.auto_reconnect = true;
+    // JSPM.JSPrintManager.start();
+    // JSPM.JSPrintManager.WS.onStatusChanged = () => {
+    //   if (this.jspmWSStatus()) {
+    //     // get client installed printers
+    //     JSPM.JSPrintManager.getPrinters().then((myPrinters: string[]) => {
+    //       // this.printers = myPrinters;
+    //       console.log(myPrinters);
+    //       // this.doPrintPDF();
+    //     });
+    //   }
+    // };
     // let spawn = require('child_process').spawn;
     // spawn('powershell.exe', ['.\download-packages-license.ps1']);
     // this.titlestr = this.title.split(',');
@@ -135,6 +136,7 @@ export class CardComponent implements OnInit, OnChanges, AfterViewInit {
   }
   ngAfterViewInit() {
     // // // console.log(this.card._animationMode);
+    console.log(this.card.nativeElement);
   }
   exportAsExcelFile(json: any[], excelFileName: string, sheetName: string): void {
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);

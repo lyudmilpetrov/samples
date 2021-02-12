@@ -1,0 +1,22 @@
+<mat-spinner [strokeWidth]="2" [diameter]="192" mode="indeterminate" *ngIf="!showdata"></mat-spinner>
+<form [formGroup]="StockForm" class="login-form">
+    <h1>Select Exchange</h1>
+    <mat-form-field appearance="fill">
+        <mat-select formControlName="Exchanges">
+            <mat-option *ngFor="let e of AllUniqueExchanges" [value]="e">
+                {{e}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <h1>Select Stock</h1>
+    <mat-form-field appearance="fill">
+        <mat-select formControlName="Symbols">
+            <mat-option *ngFor="let e of AllSymbols" [value]="e">
+                {{e}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</form>
+<div fxFlex="75%" fxLayoutAlign="space-around stretch">
+    <canvas #linechart></canvas>
+</div>

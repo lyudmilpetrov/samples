@@ -3,9 +3,9 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BarChart, ChartInfo, LineChart, SliderInfo } from '../../data-models/data-models';
+import { BarChart, ChartInfo, LineChart, SliderInfo } from '../../../shared/data-models';
 import * as Chart from 'chart.js';
-import { ObservableAsService } from '../../services/data-service';
+import { ObservableAsService } from '../../../services/data-services';
 @Component({
     selector: 'app-dashboards-line-chart',
     templateUrl: './line-chart.component.html',
@@ -13,6 +13,7 @@ import { ObservableAsService } from '../../services/data-service';
 })
 export class LineChartComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
     @Input() PassedInfo: ChartInfo;
+    @ViewChild('container') divView: ElementRef;
     @ViewChild('linechart') linechartCanvas: ElementRef<HTMLCanvasElement>;
     public context: CanvasRenderingContext2D;
     public chart: Chart;
@@ -31,6 +32,12 @@ export class LineChartComponent implements OnInit, AfterViewInit, OnChanges, OnD
         }
     }
     ngAfterViewInit(): void {
+        console.log(this.PassedInfo);
+        console.log(this.divView.nativeElement);
+        this.widthDiv = this.divView.nativeElement.clientWidth;
+        this.heightDiv = this.divView.nativeElement.clientHeight;
+        this.linechartCanvas.nativeElement.width = this.divView.nativeElement.clientWidth;
+        // this.linechartCanvas.nativeElement.height = this.divView.nativeElement.clientHeight;
         this.Slider_Data_1_Subscription = this.OAS.ObservableSlider_Bar_1.subscribe(x => {
             if (Object.keys(x).length !== 0) {
                 this.Slider_Data_1 = x;

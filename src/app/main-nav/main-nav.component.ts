@@ -38,9 +38,14 @@ export class MainNavComponent implements OnInit, AfterViewInit {
     private router: Router,
     private cdr: ChangeDetectorRef) {
     if (window.location.hostname === 'localhost') {
-      this.menuItems = ['Chart.js', 'Face-Login', 'Face-Recognition', 'Face-Mesh', 'Maps', 'Landing-video', 'WebRTC'];
+      this.menuItems = [
+        // 'Chart.js', 'Face-Login', 'Face-Recognition', 'Face-Mesh', 'Maps',
+        // 'Landing-video', 'WebRTC'
+        'Chart.js', 'Face-Recognition',
+        'Landing-video', 'Stocks'
+      ];
     } else {
-      this.menuItems = ['Chart.js', 'Face-Recognition', 'Landing-video'];
+      this.menuItems = ['Chart.js', 'Face-Recognition', 'Landing-video', 'Stocks'];
     }
     this.LabelStr = this.menuItems[0];
   }
@@ -53,7 +58,7 @@ export class MainNavComponent implements OnInit, AfterViewInit {
     this.hidetop = false;
     this.hidetop2 = false;
   }
-  ngOnInit() {}
+  ngOnInit() { }
   receiveFromSignalR($event: ChannelEvent) {
     // // // // // // // // console.log($event);
     if (typeof $event.Data.State !== 'undefined') {
@@ -66,6 +71,6 @@ export class MainNavComponent implements OnInit, AfterViewInit {
     }
   }
   ngAfterViewInit() {
-      this.sentToSignalRChannel = 'signalrdemo';
+    this.sentToSignalRChannel = 'signalrdemo';
   }
 }

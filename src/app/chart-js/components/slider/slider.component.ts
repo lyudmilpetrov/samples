@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy, OnInit, Input, Output, ViewChild, EventEmitter, ElementRef, AfterViewChecked, OnDestroy } from '@angular/core';
 import { MatSliderChange } from '@angular/material/slider';
-import { SliderInfo } from '../../data-models/data-models';
+import { SliderInfo } from '../../../shared/data-models';
 import { Subscription } from 'rxjs';
-import { GeneralChartServices, ObservableAsService } from '../../services/data-service';
+import { GeneralChartServices, ObservableAsService } from '../../../services/data-services';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -36,7 +36,7 @@ export class SliderComponent implements OnInit, OnDestroy {
             this.slider._value = 'dddd';
             return this.slider._value;
         } else {
-        return value;
+            return value;
         }
     }
     onInputChange(event: MatSliderChange) {

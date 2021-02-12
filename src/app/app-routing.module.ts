@@ -14,11 +14,12 @@ export const routes: Routes = [
   { path: 'maps', loadChildren: () => import('./maps/maps.module').then(m => m.MapsModule) },
   { path: 'landing-video', loadChildren: () => import('./landing-video/landing-video.module').then(m => m.LandingVideoModule) },
   { path: 'webrtc', loadChildren: () => import('./web-rtc/web-rtc.module').then(m => m.WebRTCModule) },
+  { path: 'stocks', loadChildren: () => import('./stocks/stocks-sample.model').then(m => m.StocksSampleModule) },
   { path: '**', redirectTo: 'chart-js', pathMatch: 'full' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

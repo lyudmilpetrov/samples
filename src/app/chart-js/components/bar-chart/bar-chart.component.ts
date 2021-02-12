@@ -3,9 +3,9 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BarChart, ChartInfo } from '../../data-models/data-models';
+import { BarChart, ChartInfo } from '../../../shared/data-models';
 import * as Chart from 'chart.js';
-import { ObservableAsService } from '../../services/data-service';
+import { ObservableAsService } from '../../../services/data-services';
 @Component({
     selector: 'app-dashboards-bar-chart',
     templateUrl: './bar-chart.component.html',
@@ -114,5 +114,5 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     }
     ngOnChanges(changes: SimpleChanges) {
         // // // console.log(this.PassedInfo);
-     }
+    }
 }

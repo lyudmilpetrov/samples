@@ -3,16 +3,15 @@ import { Directive, ElementRef } from '@angular/core';
 import { ApiServices, DataServices, GenericServices, OfflineService } from '../services/services';
 import { Subject, interval, Subscription, BehaviorSubject } from 'rxjs';
 import { filter, map, pairwise } from 'rxjs/operators';
-import { BarChart, ChartInfo, IDataSample1, IJSONReports, JSONFile, LineChart, SliderInfo } from './data-models/data-models';
+import { BarChart, ChartInfo, IDataSample1, IJSONReports, JSONFile, LineChart, SliderInfo } from '../shared/data-models';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { GeneralChartServices, ObservableAsService } from './services/data-service';
+import { GeneralChartServices, ObservableAsService } from '../services/data-services';
 
 @Component({
   templateUrl: './chart-js.html',
   styleUrls: ['./chart-js.css']
 })
 export class ChartJSComponent implements OnInit, OnDestroy, AfterViewInit {
-  // @ViewChild('myIdentifier') myIdentifier: ElementRef;
   breakpoint: number;
   showdata = false;
   forSlider_Min: number;

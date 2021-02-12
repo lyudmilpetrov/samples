@@ -84,3 +84,23 @@ export interface IJSONReports {
     UserName: string;
     UserMachine: string;
 }
+export interface Stock {
+    id: string;
+    class: string;
+    exchange: string;
+    symbol: string;
+    name: string;
+    status: string;
+    tradable: boolean;
+    marginable: boolean;
+    shortable: boolean;
+    easy_to_borrow: boolean;
+}
+export interface StockData {
+    t: number;
+    o: number;
+    h: number;
+    l: number;
+    c: number;
+    v: number;
+}

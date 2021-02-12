@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileUploadComponent } from '@app/components/file-upload/file-upload.component';
 import { OverlayMessageComponent } from '@app/components/overlay-message/overlay-message.component';
-import { TOASTR_TOKEN } from '@app/services/toastr.service';
+import { TOASTR_TOKEN, Toastr } from '@app/services/toastr.service';
 import * as faceapi from 'face-api.js';
 import { GenericServices, OfflineService } from '../services/services';
 import { WebWorker } from './web_worker';
@@ -80,6 +80,7 @@ export class FaceRecognitionComponent implements OnInit {
   mobileHide = false;
   screenWidth: any;
   screenHeight: any;
+  cameraOn = true;
   constructor(
     @Inject(TOASTR_TOKEN) private toastr: Toastr,
     private renderer: Renderer2,
@@ -132,7 +133,6 @@ export class FaceRecognitionComponent implements OnInit {
       console.log(faceapi);
     });
     this.startCamera();
-
   }
   onResize(event) {
     this.breakpoint = (event.target.innerWidth <= 4) ? 1 : 2;
@@ -143,11 +143,12 @@ export class FaceRecognitionComponent implements OnInit {
   async loadF(url: string, call: string) {
     await faceapi[call](url);
   }
-  handleError(error) {
-    console.log('Error: ', error);
-    this.toastr.options.positionClass = 'toast-top-center';
-    this.toastr.error(error, 'Issue!');
-  }
+  // handleError(error) {
+  //   console.log('Error: ', error);
+  //   // this.cameraOn = false;
+  //   // this.toastr.options.positionClass = 'toast-top-center';
+  //   // this.toastr.error(error, 'Issue!');
+  // }
   attachVideo(stream) {
     this.renderer.setProperty(this.videoElement.nativeElement, 'srcObject', stream);
     this.renderer.listen(this.videoElement.nativeElement, 'play', (event) => {
@@ -158,10 +159,10 @@ export class FaceRecognitionComponent implements OnInit {
   }
   startCamera() {
     if (!!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
-      navigator.mediaDevices.getUserMedia(this.constraints).then(this.attachVideo.bind(this)).catch(this.handleError);
-    } else {
-      this.toastr.options.positionClass = 'toast-top-center';
-      this.toastr.error('Camera not available!', 'Issue!');
+      navigator.mediaDevices.getUserMedia(this.constraints).then(this.attachVideo.bind(this)).catch(() => {
+        this.toastr.options.positionClass = 'toast-top-center';
+        this.toastr.error('No camera found!', 'Issue!');
+      });
     }
   }
   captureImageFirst() {

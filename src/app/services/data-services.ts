@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { throwError as observableThrowError, Observable, from, BehaviorSubject, Subject, Subscription, AsyncSubject, of } from 'rxjs';
-import { map, filter, scan, catchError, mergeMap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { throwError as observableThrowError, Observable, from, BehaviorSubject, Subject, Subscription, AsyncSubject, of, throwError } from 'rxjs';
+import { map, filter, scan, catchError, mergeMap, debounceTime, distinctUntilChanged, switchMap, retry } from 'rxjs/operators';
 import { FilesJsonInfo, UserInfo } from 'src/app/shared/globals';
-import { BarChart, DataBarChart, DataLineChart, HSLAObject, IDataSample1, IJSONReports, LineChart, RadarChart, SliderInfo } from '../data-models/data-models';
+import { BarChart, DataBarChart, DataLineChart, HSLAObject, IDataSample1, IJSONReports, JSONFile, LineChart, RadarChart, SliderInfo, StockData } from '../shared/data-models';
 import { Optional } from '@angular/core';
 import { SkipSelf } from '@angular/core';
 import { DIR_DOCUMENT } from '@angular/cdk/bidi';
+
 @Injectable({ providedIn: 'root' })
 export class GeneralChartServices {
     constructor(
@@ -269,5 +270,116 @@ export class ObservableAsService {
         dataBar.index = chartid;
         return dataBar;
     }
+    convertToLineChartFromStockData(
+        data: StockData[], charttitle: string,
+        keyfordatasets: string[]): LineChart {
+        // console.log(data);
+        const dataLine: LineChart = {};
+        dataLine.title = charttitle;
+        dataLine.index = 1;
+        dataLine.datasets = [];
+        const datasetsInfo = keyfordatasets;
+        const lables = [...new Set(data.map(x => {
+            const utcSeconds = x.t;
+            var d = new Date(0);
+            d.setUTCSeconds(utcSeconds);
+            return d.toLocaleDateString(undefined, {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+        ))].filter(x => x !== undefined);
+        dataLine.labels = lables;
+        datasetsInfo.map(y => {
+            // console.log(y);
+            const datasetsForDataLine: DataLineChart = {};
+            const dataN = [];
+            data.map(x => {
+                dataN.push(x[y]);
+            });
+            datasetsForDataLine.data = dataN;
+            datasetsForDataLine.fill = true;
+            if (y === 'h') {
+                datasetsForDataLine.label = 'High';
+                datasetsForDataLine.borderColor = 'hsl(236, 82%, 61%, 1)';
+            } else {
+                datasetsForDataLine.label = 'Low';
+                datasetsForDataLine.borderColor = 'hsl(102, 82%, 61%, 1)';
+            }
+            dataLine.datasets.push(datasetsForDataLine);
+        });
+        return dataLine;
+    }
 }
-
+@Injectable({ providedIn: 'root' })
+export class ApiStocksServices {
+    keyid = 'PKER2FZXNEBK7KUVZ5NC';
+    keysec = 'IrG5SGGloRkDrCL6wmLYaqwFdQFAJ6g8URKwSRYH';
+    currentProjectChosenSubscription: Subscription;
+    constructor(
+        private http: HttpClient) {
+    }
+    getAllActiveStocks(): Observable<any> {
+        const url = 'https://paper-api.alpaca.markets/v2/assets';
+        return this.http.get(url, {
+            headers: { 'APCA-API-KEY-ID': this.keyid, 'APCA-API-SECRET-KEY': this.keysec }
+        }).pipe(map((r) => {
+            // console.log(r);
+            return r;
+        }
+        ), catchError((e: any) => observableThrowError(e)));
+    }
+    getDailyDataStocks(symbol: string): Observable<any> {
+        const url = 'https://data.alpaca.markets/v1/bars/1D?symbols=' + symbol;
+        return this.http.get(url, {
+            headers: { 'APCA-API-KEY-ID': this.keyid, 'APCA-API-SECRET-KEY': this.keysec }
+        }).pipe(map((r) => {
+            // console.log(r);
+            return r;
+        }
+        ), catchError((e: any) => observableThrowError(e)));
+    }
+}
+@Injectable({ providedIn: 'root' })
+export class APIsServices {
+    constructor(
+        // @Optional() @SkipSelf() parentModule: APIsServices,
+        private httpClient: HttpClient
+    ) {
+        // if (parentModule) {
+        //     throw new Error(
+        //         'CoreModule is already loaded. Import it in the AppModule only');
+        // }
+    }
+    private handleError(error: HttpErrorResponse) {
+        if (error.error instanceof ErrorEvent) {
+            console.error('An error occured:', error.error.message);
+        } else {
+            console.error(
+                `Backend returned code ${error.status}, ` + `body was: ${error.error}`
+            );
+        }
+        return throwError(`Backend returned code ${error.status}, body was: ${error.error}, message was: ${error.message}`);
+    }
+    fileExists(url: string): Observable<boolean> {
+        return this.httpClient.get(url).pipe(map(() => true), catchError(() => of(false)));
+    }
+    getJSON(filepath: string) {
+        return this.httpClient.get<JSONFile>((filepath)).pipe(
+            retry(3),
+            catchError(this.handleError)
+        );
+    }
+    getJSON_1(filepath: string) {
+        return this.httpClient.get((filepath));
+    }
+    getJSON_2(filepath: string) {
+        return this.httpClient.get<JSONFile>((filepath));
+    }
+    getJSON_3(filepath: string) {
+        return this.httpClient.get<JSONFile>((filepath)).pipe(
+            catchError(this.handleError)
+        );
+    }
+}

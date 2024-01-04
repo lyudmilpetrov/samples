@@ -11,7 +11,7 @@
             "prefix": "app",
             "architect": {
                 "build": {
-                    "builder": "@angular-builders/custom-webpack:browser",
+                    "builder": "@angular-devkit/build-angular:browser",
                     "options": {
                         "outputPath": "C:\\Users\\ljudm\\source\\repos\\samples\\wwwroot\\",
                         "index": "src/index.html",
@@ -40,10 +40,7 @@
                             "./src/assets/js/zip.js",
                             "./src/assets/js/zip-ext.js",
                             "./src/assets/js/deflate.js"
-                        ],
-                        "customWebpackConfig": {
-                            "path": "./custom-webpack.config.js"
-                        }
+                        ]
                     },
                     "configurations": {
                         "production": {
@@ -134,15 +131,10 @@
                             "devServerTarget": "speech-recognition:serve:production"
                         }
                     }
-                },
-                "deploy": {
-                    "builder": "angular-cli-ghpages:deploy",
-                    "options": {}
                 }
             }
         }
     },
-    "defaultProject": "speech-recognition",
     "cli": {
         "analytics": "913acf51-f5b9-4e3d-b41f-58c01ebc57af"
     }

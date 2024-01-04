@@ -1,6 +1,8 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
     "baseUrl": "./",
     "paths": {
       "@app/*": [
@@ -24,20 +26,16 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "module": "esnext",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "esnext",
+    "target": "ES2022",
     "lib": [
-      "esnext",
+      "ESNext",
       "dom"
     ]
   },
   "angularCompilerOptions": {
-    "skipLibCheck" : true,
-    "resolveJsonModule": true,
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true,
     "enableIvy": true
   }
 }
